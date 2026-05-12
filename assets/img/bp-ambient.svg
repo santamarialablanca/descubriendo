@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" fill="none">
+  <defs>
+    <linearGradient id="bp-base" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="45%" stop-color="#fafcf8"/>
+      <stop offset="100%" stop-color="#fffef8"/>
+    </linearGradient>
+    <radialGradient id="bp-g1" cx="50%" cy="0%" r="70%">
+      <stop offset="0%" stop-color="#7FAE3A" stop-opacity="0.14"/>
+      <stop offset="55%" stop-color="#7FAE3A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bp-g2" cx="100%" cy="80%" r="55%">
+      <stop offset="0%" stop-color="#F4C84A" stop-opacity="0.12"/>
+      <stop offset="60%" stop-color="#F4C84A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bp-g3" cx="0%" cy="85%" r="50%">
+      <stop offset="0%" stop-color="#c8e5f2" stop-opacity="0.18"/>
+      <stop offset="65%" stop-color="#c8e5f2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bp-base)"/>
+  <rect width="1600" height="1000" fill="url(#bp-g1)"/>
+  <rect width="1600" height="1000" fill="url(#bp-g2)"/>
+  <rect width="1600" height="1000" fill="url(#bp-g3)"/>
+</svg>

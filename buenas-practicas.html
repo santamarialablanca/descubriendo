@@ -1,0 +1,3799 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Buenas prácticas · Descubriendo · CSMB</title>
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content="Presentación de buenas prácticas del proyecto Descubriendo · Educación Infantil CSMB." />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23F4C84A'/%3E%3Cpath d='M32 12c-12 4-20 14-20 24 0 8 6 14 20 16 14-2 20-8 20-16 0-10-8-20-20-24z' fill='%237FAE3A'/%3E%3Cpath d='M14 24h36' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="preload" href="assets/img/bp-ambient.svg" as="image" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      :root {
+        --chrome-bg: #ffffff;
+        --chrome-elevated: #fafafa;
+        --chrome-border: #e8e8e6;
+        --chrome-text: #18181b;
+        --chrome-muted: #71717a;
+        --accent: #7fae3a;
+        --accent-deep: #5c8a26;
+        --accent-dim: color-mix(in srgb, var(--accent-deep) 85%, #fff);
+        --slide-bg: #ffffff;
+        --slide-ink: #18181b;
+        --slide-muted: #52525b;
+        --slide-line: #e4e4e7;
+        --card-a: #f4f4f5;
+        --card-b: #ecfdf5;
+        --card-c: #fff7ed;
+        --card-d: #eff6ff;
+        --card-e: #fdf2f8;
+        --font-display: "Fraunces", "Georgia", serif;
+        --font-ui: "DM Sans", system-ui, sans-serif;
+        --radius-sm: 10px;
+        --radius: 16px;
+        --radius-lg: 24px;
+        --topbar-h: 52px;
+        --dock-h: auto;
+        --shadow-slide: 0 4px 36px rgba(24, 24, 27, 0.05);
+        --slide-surface: linear-gradient(
+          165deg,
+          rgba(255, 255, 255, 0.86) 0%,
+          rgba(255, 255, 255, 0.72) 45%,
+          rgba(250, 250, 249, 0.78) 100%
+        );
+        --shadow-card: 0 2px 8px rgba(15, 15, 15, 0.04);
+        /* Tipografía unificada en diapositivas */
+        --slide-type-body: clamp(0.98rem, 1.45vw, 1.12rem);
+        --slide-type-body-lg: clamp(1.08rem, 1.75vw, 1.28rem);
+        --slide-type-lead: clamp(1rem, 1.6vw, 1.28rem);
+        --slide-type-label: 0.8125rem;
+        --slide-type-meta: 0.8125rem;
+        --slide-lh-body: 1.62;
+        --slide-lh-tight: 1.45;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: var(--accent);
+        color: #fff;
+        padding: 10px 16px;
+        z-index: 1000;
+        font-family: var(--font-ui);
+        font-weight: 600;
+        border-radius: var(--radius-sm);
+      }
+      .skip-link:focus {
+        left: 14px;
+        top: 14px;
+      }
+
+      body {
+        font-family: var(--font-ui);
+        color: var(--chrome-text);
+        background-color: var(--chrome-bg);
+        background-image: url("assets/img/bp-ambient.svg");
+        background-size: cover;
+        background-position: center top;
+        background-attachment: fixed;
+        overflow-x: hidden;
+      }
+
+      /* ——— Deck shell ——— */
+      .deck {
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .deck-topbar {
+        height: var(--topbar-h);
+        flex-shrink: 0;
+        border-bottom: 1px solid var(--chrome-border);
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(16px) saturate(1.15);
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+        z-index: 40;
+      }
+      .deck-topbar__inner {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 clamp(14px, 3vw, 28px);
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      .deck-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+      .deck-brand__mark {
+        width: 34px;
+        height: 34px;
+        border-radius: var(--radius-sm);
+        background: transparent;
+        border: none;
+        flex-shrink: 0;
+      }
+      .deck-brand__mark--img {
+        display: block;
+        object-fit: contain;
+        padding: 3px;
+      }
+      .deck-brand__school {
+        display: block;
+        font-family: var(--font-ui);
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--chrome-text);
+      }
+      .deck-brand__line {
+        display: block;
+        font-size: 12px;
+        color: var(--chrome-text);
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .deck-topbar__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-end;
+        align-items: center;
+      }
+      .deck-tag {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 5px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--chrome-border);
+        color: var(--chrome-muted);
+        background: rgba(255, 255, 255, 0.7);
+      }
+      .deck-tag--accent {
+        color: var(--accent-deep);
+        border-color: color-mix(in srgb, var(--accent) 28%, var(--chrome-border));
+        background: rgba(127, 174, 58, 0.1);
+      }
+
+      .deck-workspace {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .viewport {
+        flex: 1;
+        display: grid;
+        place-items: center;
+        padding: clamp(12px, 2.5vw, 28px);
+        overflow: auto;
+        min-height: 0;
+      }
+
+      .slide {
+        width: min(1180px, 100%);
+        min-height: min(520px, calc(100dvh - var(--topbar-h) - 120px));
+        display: none;
+        position: relative;
+        overflow-x: hidden;
+        overflow-y: visible;
+        padding: clamp(1.5rem, 3.2vw, 2.75rem) clamp(1.6rem, 3.5vw, 3.25rem);
+        background: var(--slide-surface);
+        backdrop-filter: blur(22px) saturate(1.12);
+        -webkit-backdrop-filter: blur(22px) saturate(1.12);
+        color: var(--slide-ink);
+        border-radius: clamp(18px, 2.5vw, 28px);
+        border: 1px solid rgba(255, 255, 255, 0.55);
+        box-shadow: var(--shadow-slide);
+      }
+      .slide.is-active {
+        display: block;
+        animation: deck-reveal 0.26s ease-out both;
+      }
+      @keyframes deck-reveal {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      .slide::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background: linear-gradient(
+          155deg,
+          rgba(127, 174, 58, 0.055) 0%,
+          transparent 48%
+        );
+        z-index: 0;
+      }
+      .slide.slide--cover::before {
+        background:
+          radial-gradient(ellipse 95% 58% at 50% -8%, rgba(127, 174, 58, 0.18), transparent 58%),
+          linear-gradient(175deg, rgba(255, 255, 255, 0.35) 0%, transparent 52%);
+      }
+      .slide.slide--cover.slide--outro::before {
+        background:
+          radial-gradient(ellipse 85% 52% at 50% 108%, rgba(127, 174, 58, 0.12), transparent 58%),
+          linear-gradient(5deg, rgba(255, 255, 255, 0.32) 0%, transparent 48%);
+      }
+      .slide.slide--t1::before {
+        background:
+          radial-gradient(ellipse 72% 52% at 100% 0%, rgba(127, 174, 58, 0.14), transparent 62%),
+          linear-gradient(185deg, rgba(236, 253, 245, 0.55) 0%, transparent 52%);
+      }
+      .slide.slide--t2::before {
+        background:
+          radial-gradient(ellipse 68% 48% at 0% 102%, rgba(234, 179, 8, 0.11), transparent 58%),
+          linear-gradient(210deg, rgba(255, 247, 237, 0.65) 0%, transparent 52%);
+      }
+      .slide.slide--t3::before {
+        background:
+          radial-gradient(ellipse 62% 52% at 100% 100%, rgba(56, 189, 248, 0.11), transparent 58%),
+          linear-gradient(195deg, rgba(239, 246, 255, 0.62) 0%, transparent 52%);
+      }
+      .slide.slide--t4::before {
+        background:
+          radial-gradient(ellipse 58% 46% at 0% 0%, rgba(244, 114, 182, 0.09), transparent 55%),
+          linear-gradient(165deg, rgba(253, 242, 248, 0.52) 0%, transparent 48%);
+      }
+      .slide::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        opacity: 0.2;
+        background-image: repeating-linear-gradient(
+          -11deg,
+          transparent,
+          transparent 19px,
+          rgba(127, 174, 58, 0.02) 19px,
+          rgba(127, 174, 58, 0.02) 20px
+        );
+        z-index: 0;
+      }
+      .slide > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ——— Dock ——— */
+      .deck-dock {
+        flex-shrink: 0;
+        border-top: 1px solid var(--chrome-border);
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(18px) saturate(1.1);
+        box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.75) inset;
+        padding: 10px clamp(14px, 3vw, 28px) 14px;
+      }
+      .deck-dock__inner {
+        max-width: min(1120px, 100%);
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      .deck-dock__row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .deck-dock button {
+        border: 1px solid var(--chrome-border);
+        background: #fff;
+        color: var(--chrome-text);
+        font-family: var(--font-ui);
+        font-weight: 600;
+        font-size: 12px;
+        border-radius: var(--radius-sm);
+        padding: 0.45rem 0.95rem;
+        cursor: pointer;
+        transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+      }
+      .deck-dock button:hover {
+        background: var(--chrome-elevated);
+        border-color: color-mix(in srgb, var(--chrome-text) 12%, var(--chrome-border));
+      }
+      .deck-dock button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .deck-dock .primary {
+        background: var(--accent);
+        border-color: color-mix(in srgb, var(--accent) 55%, #3f5218);
+        color: #fff;
+      }
+      .deck-dock .primary:hover {
+        filter: brightness(1.05);
+        color: #fff;
+      }
+
+      .deck-progress-label {
+        width: 100%;
+        text-align: center;
+        color: var(--chrome-muted);
+        font-weight: 500;
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .deck-progress-label strong {
+        color: var(--chrome-text);
+        font-weight: 600;
+      }
+
+      .deck-progress-bar {
+        width: min(480px, 100%);
+        height: 3px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--chrome-border) 92%, var(--chrome-text));
+        overflow: hidden;
+      }
+      .deck-progress-bar__fill {
+        display: block;
+        height: 100%;
+        width: 0%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--accent-deep), var(--accent));
+        transition: width 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .deck-chapter {
+        display: inline-flex;
+        align-items: center;
+        max-width: min(240px, 34vw);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-family: var(--font-ui);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent-deep);
+        background: color-mix(in srgb, var(--accent) 12%, #fff);
+        border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--chrome-border));
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .presenter-bar {
+        flex-shrink: 0;
+        border-top: 1px solid var(--chrome-border);
+        background: rgba(250, 250, 249, 0.96);
+        z-index: 35;
+      }
+      .presenter-bar__inner {
+        max-width: min(1120px, 100%);
+        margin: 0 auto;
+        padding: 6px clamp(12px, 2.5vw, 22px);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 12px;
+      }
+      #presenter-toggle {
+        font-family: var(--font-ui);
+        font-weight: 600;
+        font-size: 11px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--chrome-border);
+        background: #fff;
+        padding: 0.35rem 0.75rem;
+        cursor: pointer;
+        color: var(--chrome-text);
+      }
+      #presenter-toggle:hover {
+        background: var(--chrome-elevated);
+      }
+      #presenter-toggle[aria-expanded="true"] {
+        border-color: color-mix(in srgb, var(--accent) 45%, var(--chrome-border));
+        color: var(--accent-deep);
+      }
+      #presenter-drawer {
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.22s ease;
+        border-top: 1px solid color-mix(in srgb, var(--chrome-border) 80%, transparent);
+      }
+      body.bp-presenter-open #presenter-drawer {
+        max-height: 200px;
+      }
+      #presenter-notes-content {
+        max-width: min(1120px, 100%);
+        margin: 0 auto;
+        padding: 10px clamp(12px, 2.5vw, 22px) 12px;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--chrome-text);
+        max-height: 180px;
+        overflow-y: auto;
+      }
+      #presenter-notes-content p {
+        margin: 0 0 0.4rem;
+        padding-left: 0.65rem;
+        border-left: 2px solid color-mix(in srgb, var(--accent) 45%, var(--chrome-border));
+      }
+      #presenter-notes-content p:last-child {
+        margin-bottom: 0;
+      }
+
+      .bp-table-wrap {
+        margin-top: 0.65rem;
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--slide-line) 72%, var(--accent) 8%);
+        background: linear-gradient(
+          155deg,
+          color-mix(in srgb, #fff 92%, var(--accent) 4%) 0%,
+          rgba(255, 255, 255, 0.78) 55%,
+          color-mix(in srgb, #fafafa 88%, var(--accent-dim) 6%) 100%
+        );
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.85) inset,
+          0 10px 28px rgba(24, 24, 27, 0.06),
+          0 2px 6px rgba(24, 24, 27, 0.04);
+      }
+      .bp-table-wrap--flush {
+        margin-top: 0.35rem;
+      }
+      .bp-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-family: var(--font-ui);
+        font-size: var(--slide-type-meta);
+        color: var(--slide-muted);
+        line-height: 1.45;
+      }
+      .bp-table caption {
+        caption-side: top;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-align: left;
+        padding: 0.65rem 1.05rem 0.72rem;
+        margin: 0;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: var(--slide-type-meta);
+        color: var(--slide-muted);
+        background: color-mix(in srgb, #fff 82%, var(--slide-line) 10%);
+        border-bottom: 1px solid color-mix(in srgb, var(--slide-line) 62%, transparent);
+      }
+      .bp-table thead {
+        background: color-mix(in srgb, var(--slide-line) 12%, #fafaf9);
+      }
+      .bp-table th,
+      .bp-table td {
+        padding: 0.62rem 0.95rem;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid color-mix(in srgb, var(--slide-line) 72%, transparent);
+      }
+      .bp-table tbody th {
+        font-weight: 700;
+        color: var(--slide-ink);
+        width: 28%;
+        min-width: 6.5rem;
+        background: color-mix(in srgb, #fefce8 42%, #fff 58%);
+        border-right: 1px solid color-mix(in srgb, var(--slide-line) 68%, transparent);
+        font-family: var(--font-ui);
+      }
+      .bp-table tbody td {
+        background: #fff;
+      }
+      .bp-table tbody tr > td:first-child {
+        font-weight: 600;
+        color: var(--slide-ink);
+        background: color-mix(in srgb, #fefce8 38%, #fff 62%);
+        border-right: 1px solid color-mix(in srgb, var(--slide-line) 68%, transparent);
+      }
+      .bp-table tbody tr > th + td {
+        font-weight: 400;
+        color: var(--slide-muted);
+      }
+      .bp-table thead th {
+        width: auto;
+        font-size: 0.68rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--slide-muted);
+        background: transparent;
+        border-right: 1px solid color-mix(in srgb, var(--slide-line) 55%, transparent);
+        vertical-align: middle;
+      }
+      .bp-table thead th:last-child {
+        border-right: none;
+      }
+      .bp-table tr:last-child th,
+      .bp-table tr:last-child td {
+        border-bottom: none;
+      }
+      .bp-table td strong {
+        color: var(--slide-ink);
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        padding: 0.1rem 0.42rem;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid color-mix(in srgb, var(--slide-line) 68%, transparent);
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+      }
+
+      .bp-kpi-strip {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: clamp(0.5rem, 2vw, 1rem);
+        margin-top: 0.75rem;
+      }
+      .bp-kpi {
+        min-width: min(7.5rem, 28vw);
+        padding: 0.65rem 0.85rem;
+        border-radius: var(--radius-sm);
+        text-align: center;
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid color-mix(in srgb, var(--slide-line) 78%, var(--accent) 12%);
+      }
+      .bp-kpi__val {
+        font-family: var(--font-display);
+        font-size: clamp(1.35rem, 3.2vw, 1.85rem);
+        font-weight: 700;
+        color: var(--slide-ink);
+        line-height: 1.1;
+      }
+      .bp-kpi__lab {
+        margin-top: 0.2rem;
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--slide-muted);
+      }
+
+      .bp-mini-bars {
+        margin-top: 0.55rem;
+        display: grid;
+        gap: 0.4rem;
+      }
+      .bp-mini-bars__cap {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--slide-muted);
+        margin-bottom: 0.15rem;
+      }
+      .bp-mini-bars__row {
+        display: grid;
+        grid-template-columns: minmax(0, 5.75rem) 1fr;
+        gap: 0.45rem;
+        align-items: center;
+        font-size: var(--slide-type-meta);
+        color: var(--slide-muted);
+      }
+      .bp-mini-bars__track {
+        height: 7px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--slide-line) 80%, #fff);
+        overflow: hidden;
+      }
+      .bp-mini-bars__fill {
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--accent-deep), var(--accent));
+      }
+      .bp-mini-bars__fill--sky {
+        background: linear-gradient(90deg, #075985, #38bdf8);
+      }
+      .bp-mini-bars__fill--coral {
+        background: linear-gradient(90deg, #9a3412, #fb923c);
+      }
+
+      .bp-badge-row {
+        margin: 1rem 0 0;
+      }
+      .bp-badge-row img {
+        display: block;
+        margin-inline: auto;
+        max-width: min(200px, 88vw);
+        height: auto;
+      }
+
+      /* ——— Estructura unificada de diapositiva ——— */
+      .slide-frame {
+        width: 100%;
+        max-width: 980px;
+        margin-inline: auto;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        position: relative;
+      }
+      .slide-head {
+        flex-shrink: 0;
+        position: relative;
+        padding-bottom: 0.15rem;
+      }
+      .slide-head .kicker {
+        margin-bottom: 0.5rem;
+      }
+      .slide-head h1,
+      .slide-head h2 {
+        margin: 0;
+      }
+      .slide-frame--cover .slide-head h1 {
+        max-width: 16ch;
+      }
+      .slide-frame--cover .slide-head h2 {
+        max-width: 22ch;
+      }
+      .slide-frame--center .slide-head h1,
+      .slide-frame--center .slide-head h2 {
+        margin-inline: auto;
+      }
+      .slide-body {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        width: 100%;
+      }
+      .slide-body > .layout-2,
+      .slide-body > .layout-3,
+      .slide-body > .cards,
+      .slide-body > .before-after,
+      .slide-body > .process-flow {
+        margin-top: 0;
+      }
+      .slide-foot {
+        flex-shrink: 0;
+        margin-top: auto;
+        padding-top: 0.25rem;
+      }
+      .slide-frame--fill {
+        min-height: min(480px, calc(100dvh - var(--topbar-h) - 200px));
+      }
+      .slide-frame--cover {
+        text-align: center;
+        align-items: center;
+      }
+      .slide-frame--cover .slide-head {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .slide-frame--cover .slide-head .kicker {
+        margin-inline: auto;
+      }
+      .slide-frame--cover .subtitle {
+        margin-inline: auto;
+      }
+      .slide-frame--cover .slide-body {
+        align-items: center;
+        width: 100%;
+      }
+      .slide-frame--center .slide-body {
+        text-align: center;
+        align-items: center;
+      }
+      .slide-frame--center .slide-body .text,
+      .slide-frame--center .slide-body .big {
+        margin-inline: auto;
+      }
+      .slide-frame--center .quote {
+        margin-inline: auto;
+        text-align: left;
+      }
+      .slide-frame--wide .slide-head h1,
+      .slide-frame--wide .slide-head h2 {
+        max-width: none;
+      }
+
+      .bp-key-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 0.35rem;
+      }
+      .bp-key-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        font-size: var(--slide-type-meta);
+        font-weight: 600;
+        color: var(--slide-muted);
+        background: rgba(255, 255, 255, 0.75);
+        border: 1px solid color-mix(in srgb, var(--slide-line) 80%, transparent);
+      }
+      .bp-key-pill i {
+        color: var(--accent-deep);
+        font-size: 0.85rem;
+      }
+
+      .bp-data-note {
+        margin: 0;
+        font-size: var(--slide-type-meta);
+        font-style: normal;
+        color: var(--slide-muted);
+        line-height: var(--slide-lh-tight);
+        max-width: 56ch;
+        padding: 0.5rem 0.65rem 0.5rem 0.75rem;
+        border-radius: var(--radius-sm);
+        background: color-mix(in srgb, var(--slide-line) 22%, transparent);
+        border-left: 3px solid color-mix(in srgb, var(--accent) 55%, var(--slide-line));
+      }
+      .bp-data-note--center {
+        max-width: 38rem;
+        margin-inline: auto;
+        text-align: center;
+        border-left: none;
+        border-top: 2px solid color-mix(in srgb, var(--accent) 35%, var(--slide-line));
+        padding-top: 0.65rem;
+      }
+
+      .bp-mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.92em;
+        font-style: normal;
+        color: #52525b;
+      }
+
+      .bp-micro-cap {
+        margin: 0.35rem 0 0;
+        font-size: var(--slide-type-meta);
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slide-muted);
+      }
+
+      .timeline-visual {
+        position: relative;
+        padding-left: 0.65rem;
+        border-left: 3px solid color-mix(in srgb, var(--accent) 45%, var(--slide-line));
+        border-radius: 2px;
+      }
+      .timeline-visual .timeline {
+        margin-top: 0;
+      }
+
+      .layout-3--objectives .card,
+      .layout-3--impact .card {
+        border-top: 3px solid transparent;
+      }
+      .layout-3--objectives .card:nth-child(1),
+      .layout-3--impact .card:nth-child(1) {
+        border-top-color: var(--accent);
+      }
+      .layout-3--objectives .card:nth-child(2),
+      .layout-3--impact .card:nth-child(2) {
+        border-top-color: #eab308;
+      }
+      .layout-3--objectives .card:nth-child(3),
+      .layout-3--impact .card:nth-child(3) {
+        border-top-color: #38bdf8;
+      }
+
+      /* Objetivos: rellenar altura de la slide y estirar tarjetas (evita hueco inferior) */
+      .slide.slide-visual--objectives.is-active {
+        display: flex;
+        flex-direction: column;
+      }
+      .slide-visual--objectives .slide-frame {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .slide-visual--objectives .slide-body {
+        flex: 1 1 auto;
+        min-height: 0;
+        justify-content: stretch;
+      }
+      .slide-visual--objectives .layout-3.layout-3--objectives {
+        flex: 1 1 auto;
+        min-height: min(22rem, 38vh);
+        margin-top: 0.35rem;
+        grid-template-rows: minmax(0, 1fr);
+        align-items: stretch;
+      }
+      .slide-visual--objectives .layout-3 .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        padding: 1.15rem 1.2rem 1.3rem;
+      }
+      .slide-visual--objectives .layout-3 .card h3 {
+        flex-shrink: 0;
+      }
+      .slide-visual--objectives .layout-3 .card p {
+        flex: 1 1 auto;
+        margin-top: 0.55rem;
+        align-self: stretch;
+      }
+
+      /* Calendario / timeline: rellenar altura y repartir bloques */
+      .slide.slide-visual--timeline.is-active {
+        display: flex;
+        flex-direction: column;
+      }
+      .slide-visual--timeline .slide-frame {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .slide-visual--timeline .slide-body.layout-2 {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+        grid-template-rows: minmax(0, 1fr);
+        align-items: stretch;
+        gap: clamp(1.25rem, 3vw, 2.25rem);
+      }
+      .slide-visual--timeline .layout-2 > div:first-child {
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+        min-width: 0;
+        min-height: 0;
+      }
+      .slide-visual--timeline .layout-2 > div:first-child > .text {
+        flex-shrink: 0;
+      }
+      .slide-visual--timeline .bp-chart {
+        flex: 1 1 auto;
+        min-height: 0;
+        align-content: center;
+      }
+      .slide-visual--timeline .timeline.timeline-visual {
+        margin-top: 0;
+        height: 100%;
+        min-height: 0;
+        display: grid;
+        grid-template-rows: repeat(4, minmax(0, 1fr));
+        gap: 0.7rem;
+        align-content: stretch;
+      }
+      .slide-visual--timeline .timeline-row {
+        align-items: stretch;
+        min-height: 0;
+      }
+      .slide-visual--timeline .timeline-row .label {
+        align-self: center;
+      }
+      .slide-visual--timeline .timeline-row .desc {
+        display: flex;
+        align-items: center;
+        min-height: 100%;
+      }
+
+      .card ul:not(.list-icons):not(.list-clean) {
+        margin: 0.35rem 0 0;
+        padding-left: 0;
+        list-style: none;
+      }
+      .card ul:not(.list-icons):not(.list-clean) li {
+        position: relative;
+        padding-left: 1.15rem;
+        margin-bottom: 0.35rem;
+      }
+      .card ul:not(.list-icons):not(.list-clean) li::before {
+        content: "\f00c";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        left: 0;
+        top: 0.15rem;
+        font-size: 0.65rem;
+        color: var(--accent-deep);
+      }
+
+      .bp-lead-in {
+        margin-bottom: 0.35rem;
+        max-width: 62ch;
+      }
+
+      .slide-visual--outro .slide-body {
+        gap: 1rem;
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+      .slide.slide--cover.slide--outro.slide-visual--outro.is-active {
+        display: flex;
+        flex-direction: column;
+      }
+      .slide.slide--cover.slide--outro .slide-frame.slide-frame--cover {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+      .slide-visual--outro .slide-body > .quote {
+        margin-top: auto;
+        padding-bottom: 0.15rem;
+      }
+      .bp-outro-icons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: center;
+        color: var(--accent-deep);
+        font-size: 1.25rem;
+        opacity: 0.9;
+      }
+      .bp-outro-mascots {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: center;
+        gap: clamp(0.65rem, 2.5vw, 1.35rem);
+        margin-top: 0.15rem;
+      }
+      .bp-outro-mascot {
+        margin: 0;
+        padding: 0;
+        border: none;
+        background: transparent;
+        text-align: center;
+      }
+      .bp-outro-mascot__img {
+        display: block;
+        height: clamp(88px, 16vw, 118px);
+        width: auto;
+        object-fit: contain;
+        margin-inline: auto;
+        filter: drop-shadow(0 10px 22px rgba(24, 24, 27, 0.08));
+      }
+      .bp-outro-mascot figcaption {
+        margin-top: 0.35rem;
+        font-size: var(--slide-type-meta);
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-transform: none;
+        color: var(--slide-muted);
+      }
+
+      /* Gráficos e iconografía reutilizables */
+      .bp-chart {
+        --bp-bar-h: 11px;
+        display: grid;
+        gap: 0.75rem;
+        padding: 1.05rem 1.2rem 1.1rem;
+        border-radius: var(--radius);
+        background: linear-gradient(
+          155deg,
+          color-mix(in srgb, #fff 92%, var(--accent) 4%) 0%,
+          rgba(255, 255, 255, 0.72) 55%,
+          color-mix(in srgb, #fafafa 88%, var(--accent-dim) 6%) 100%
+        );
+        border: 1px solid color-mix(in srgb, var(--slide-line) 72%, var(--accent) 8%);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.85) inset,
+          0 10px 28px rgba(24, 24, 27, 0.06),
+          0 2px 6px rgba(24, 24, 27, 0.04);
+      }
+      .bp-chart__cap {
+        font-size: var(--slide-type-meta);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--slide-muted);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding-bottom: 0.35rem;
+        margin-bottom: 0.1rem;
+        border-bottom: 1px solid color-mix(in srgb, var(--slide-line) 65%, transparent);
+      }
+      .bp-chart__cap i,
+      .bp-table caption > i,
+      .bp-mini-bars__cap > i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        flex-shrink: 0;
+        border-radius: 10px;
+        font-size: 0.78rem;
+        color: var(--accent-deep);
+        background: color-mix(in srgb, var(--accent) 16%, #fff);
+        border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--slide-line));
+      }
+      .bp-bar-row {
+        display: grid;
+        grid-template-columns: minmax(0, max-content) minmax(0, 1fr) minmax(2.5rem, max-content);
+        align-items: center;
+        gap: 0.55rem 0.85rem;
+        font-size: var(--slide-type-meta);
+        color: var(--slide-muted);
+      }
+      .bp-bar-row > span:first-of-type {
+        font-weight: 600;
+        color: var(--slide-ink);
+        letter-spacing: 0.02em;
+      }
+      .bp-bar-row strong {
+        color: var(--slide-ink);
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        font-size: calc(var(--slide-type-meta) + 0.02rem);
+        justify-self: end;
+        min-width: 2.25rem;
+        text-align: right;
+        padding: 0.12rem 0.4rem;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.65);
+        border: 1px solid color-mix(in srgb, var(--slide-line) 70%, transparent);
+      }
+      .bp-bar {
+        height: var(--bp-bar-h);
+        border-radius: 999px;
+        background: linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--slide-line) 55%, #fff) 0%,
+          color-mix(in srgb, var(--slide-line) 88%, #f4f4f5) 100%
+        );
+        box-shadow: inset 0 1px 2px rgba(24, 24, 27, 0.07);
+        overflow: hidden;
+        min-width: 0;
+      }
+      .bp-bar__fill {
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(
+          90deg,
+          color-mix(in srgb, var(--accent-deep) 92%, #000) 0%,
+          var(--accent) 48%,
+          color-mix(in srgb, var(--accent) 75%, #fff) 100%
+        );
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        transition: width 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .bp-bar__fill--coral {
+        background: linear-gradient(90deg, #9a3412, #ea580c 45%, #fb923c);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      }
+      .bp-bar__fill--sky {
+        background: linear-gradient(90deg, #075985, #0284c7 42%, #38bdf8);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      }
+      .slide.is-active .bp-bar__fill {
+        animation: bp-bar-shine 0.85s ease-out 0.15s both;
+      }
+      @keyframes bp-bar-shine {
+        from {
+          filter: brightness(1.05);
+          opacity: 0.88;
+        }
+        to {
+          filter: brightness(1);
+          opacity: 1;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .slide.is-active .bp-bar__fill {
+          animation: none;
+        }
+        .bp-bar__fill {
+          transition-duration: 0.2s;
+        }
+      }
+      .bp-chart + .bp-data-note {
+        margin-top: 0.45rem;
+      }
+
+      /* Bloques reutilizables: columna secundaria + franja inferior (escritorio) */
+      .bp-slide-aside {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        min-width: 0;
+      }
+      .bp-slide-aside .bp-data-note {
+        margin-top: 0;
+        text-align: left;
+      }
+      .bp-slide-band {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+        min-width: 0;
+      }
+      .bp-slide-band .pill-row {
+        margin-top: 0;
+      }
+      .bp-slide-band .bp-table-wrap {
+        margin-top: 0;
+        max-width: none;
+      }
+      .bp-slide-band .cards {
+        margin-top: 0;
+      }
+      .bp-slide-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.45rem;
+        width: 100%;
+        min-width: 0;
+      }
+      .bp-rings {
+        display: flex;
+        justify-content: center;
+        gap: clamp(0.75rem, 3vw, 1.75rem);
+        flex-wrap: wrap;
+        margin-top: 0.5rem;
+      }
+      .bp-ring {
+        --p: 33.33%;
+        width: 5.5rem;
+        height: 5.5rem;
+        border-radius: 50%;
+        background: conic-gradient(var(--accent) var(--p), color-mix(in srgb, var(--slide-line) 88%, #fff) 0);
+        display: grid;
+        place-items: center;
+        position: relative;
+        isolation: isolate;
+      }
+      .bp-ring::after {
+        content: "";
+        position: absolute;
+        inset: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.94);
+        display: grid;
+        place-items: center;
+      }
+      .bp-ring span {
+        position: relative;
+        z-index: 1;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: var(--accent-deep);
+      }
+      .bp-ring--sun {
+        --p: 33.33%;
+        background: conic-gradient(#eab308 var(--p), color-mix(in srgb, var(--slide-line) 88%, #fff) 0);
+      }
+      .bp-ring--sun span {
+        color: #a16207;
+      }
+      .bp-ring--sky {
+        --p: 33.33%;
+        background: conic-gradient(#38bdf8 var(--p), color-mix(in srgb, var(--slide-line) 88%, #fff) 0);
+      }
+      .bp-ring--sky span {
+        color: #0369a1;
+      }
+      .bp-stat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin-top: 0.75rem;
+      }
+      .bp-stat {
+        text-align: center;
+        padding: 0.85rem 0.65rem;
+        border-radius: var(--radius-sm);
+        background: rgba(255, 255, 255, 0.75);
+        border: 1px solid color-mix(in srgb, var(--slide-line) 78%, transparent);
+      }
+      .bp-stat i {
+        font-size: 1.35rem;
+        color: var(--accent-deep);
+        margin-bottom: 0.35rem;
+        display: block;
+      }
+      .bp-stat strong {
+        display: block;
+        font-family: var(--font-display);
+        font-size: 1.65rem;
+        color: var(--slide-ink);
+        line-height: 1.1;
+      }
+      .bp-stat span {
+        font-size: var(--slide-type-meta);
+        color: var(--slide-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .timeline-row .label i {
+        margin-right: 0.35rem;
+        opacity: 0.85;
+      }
+      .task-icon .symbol i {
+        font-size: 1.2rem;
+      }
+      .step-icon i {
+        font-size: 1rem;
+      }
+      .card h3 i {
+        margin-right: 0.35rem;
+        opacity: 0.9;
+        color: var(--accent-deep);
+      }
+      .slide-visual {
+        position: relative;
+      }
+      .slide-visual--cover::after {
+        content: "";
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        top: -20px;
+        right: -24px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(127, 174, 58, 0.2), transparent 68%);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .slide-visual--split-quote .slide-body {
+        position: relative;
+      }
+      .slide-visual--split-quote .slide-body::before {
+        content: "\f10e";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        font-size: 4rem;
+        color: rgba(127, 174, 58, 0.12);
+        right: 0;
+        top: -0.5rem;
+        line-height: 1;
+        pointer-events: none;
+      }
+      .slide-visual--compare .before-after {
+        position: relative;
+      }
+      .slide-visual--idea .slide-head::after {
+        content: "";
+        display: block;
+        width: 4rem;
+        height: 4px;
+        margin-top: 0.75rem;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent), transparent);
+      }
+      .slide-visual--idea.slide-frame--center .slide-head::after {
+        margin-inline: auto;
+      }
+      /* ——— Slide typography & layout ——— */
+      .content {
+        min-height: 100%;
+        width: 100%;
+        max-width: 980px;
+        margin-inline: auto;
+      }
+      .content--fill {
+        display: flex;
+        flex-direction: column;
+        min-height: min(480px, calc(100dvh - var(--topbar-h) - 200px));
+      }
+
+      .kicker {
+        margin: 0 0 0.75rem;
+        font-family: var(--font-ui);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent-deep);
+        display: inline-block;
+        padding: 0.38rem 0.85rem;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--accent) 11%, #fff);
+        border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--slide-line));
+      }
+      .center .kicker,
+      .slide-frame--center .slide-head .kicker {
+        margin-inline: auto;
+        display: inline-block;
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        line-height: 1.05;
+        color: var(--slide-ink);
+      }
+      h1 {
+        font-size: clamp(2.4rem, 5.5vw, 4rem);
+      }
+      .slide--cover:not(.slide--outro) h1 {
+        background: linear-gradient(120deg, var(--slide-ink) 0%, color-mix(in srgb, var(--accent-deep) 72%, var(--slide-ink)) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      h2 {
+        font-size: clamp(1.45rem, 3vw, 2.35rem);
+      }
+
+      .subtitle {
+        margin: 0.85rem 0 0;
+        font-size: var(--slide-type-lead);
+        font-weight: 400;
+        color: var(--slide-muted);
+        line-height: var(--slide-lh-tight);
+        max-width: 38ch;
+      }
+
+      .text {
+        color: var(--slide-muted);
+        font-size: var(--slide-type-body);
+        line-height: var(--slide-lh-body);
+        max-width: 68ch;
+      }
+      .text strong {
+        color: var(--slide-ink);
+        font-weight: 600;
+      }
+      .big {
+        font-size: var(--slide-type-body-lg);
+        line-height: var(--slide-lh-tight);
+      }
+
+      .center {
+        display: grid;
+        place-items: center;
+        text-align: center;
+      }
+      .center .subtitle,
+      .center .text {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .layout-2 {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: clamp(1.25rem, 3vw, 2.25rem);
+        align-items: start;
+      }
+      .layout-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        align-items: stretch;
+        margin-top: 1.35rem;
+      }
+      .layout-3--start {
+        text-align: left;
+      }
+      .stack {
+        display: grid;
+        gap: 0.85rem;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.85rem;
+        margin-top: 1.15rem;
+        align-items: stretch;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid color-mix(in srgb, var(--slide-line) 85%, transparent);
+        border-radius: var(--radius);
+        padding: 1rem 1.15rem;
+        box-shadow: none;
+      }
+      .card h3 {
+        margin: 0 0 0.4rem;
+        font-family: var(--font-ui);
+        font-size: var(--slide-type-label);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--slide-ink);
+      }
+      .card p,
+      .card li {
+        margin: 0;
+        color: var(--slide-muted);
+        font-size: var(--slide-type-body);
+        line-height: var(--slide-lh-body);
+      }
+      .card ul {
+        margin: 0.35rem 0 0;
+        padding-left: 1.05rem;
+      }
+      .card--green {
+        background: var(--card-b);
+        border-color: color-mix(in srgb, var(--accent) 22%, var(--slide-line));
+      }
+      .card--sun {
+        background: var(--card-c);
+        border-color: var(--slide-line);
+      }
+      .card--coral {
+        background: var(--card-e);
+        border-color: var(--slide-line);
+      }
+      .card--sky {
+        background: var(--card-d);
+        border-color: var(--slide-line);
+      }
+      .card--pink {
+        background: var(--card-e);
+        border-color: var(--slide-line);
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1.25rem;
+        justify-content: flex-start;
+      }
+      .pill-row--center {
+        justify-content: center;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.4rem 0.75rem;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid var(--slide-line);
+        font-weight: 600;
+        font-size: var(--slide-type-meta);
+        color: var(--slide-muted);
+      }
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .dot.coral {
+        background: #e07a5f;
+      }
+      .dot.sun {
+        background: #eab308;
+      }
+      .dot.sky {
+        background: #38bdf8;
+      }
+      .dot.pink {
+        background: #f472b6;
+      }
+
+      .quote {
+        font-family: var(--font-display);
+        font-style: italic;
+        font-weight: 450;
+        color: var(--slide-muted);
+        border-left: 3px solid var(--accent);
+        padding-left: 1.1rem;
+        margin-top: 1.15rem;
+        font-size: var(--slide-type-body-lg);
+        line-height: var(--slide-lh-tight);
+      }
+
+      .slide-footer i {
+        margin-right: 0.35rem;
+        opacity: 0.88;
+      }
+      .slide-footer {
+        margin-top: auto;
+        padding-top: 1.35rem;
+        border-top: 1px solid color-mix(in srgb, var(--slide-line) 65%, transparent);
+        color: var(--slide-muted);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .slide-footer--contain {
+        width: 100%;
+        max-width: 36rem;
+        margin-inline: auto;
+      }
+      .slide-footer--narrow {
+        max-width: 28rem;
+        width: 100%;
+        margin-inline: auto;
+      }
+
+      /* Hero (sin marco: mascotas sobre el fondo de la slide) */
+      .bp-hero {
+        width: min(520px, 100%);
+        margin: 1.5rem auto 0;
+      }
+      .bp-hero__pair {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: clamp(0.75rem, 4vw, 2.25rem);
+        padding: 0.25rem 0 0;
+      }
+      .bp-hero__img {
+        flex: 0 1 auto;
+        width: auto;
+        height: clamp(150px, 38vw, 220px);
+        max-width: 48%;
+        object-fit: contain;
+        object-position: bottom;
+        filter: drop-shadow(0 18px 32px rgba(24, 24, 27, 0.09));
+      }
+      .bp-hero--compact {
+        margin-top: 0.5rem;
+      }
+      .bp-hero--compact .bp-hero__pair {
+        gap: clamp(0.45rem, 2.5vw, 1.25rem);
+      }
+      .bp-hero--compact .bp-hero__img {
+        height: clamp(118px, 30vw, 168px);
+      }
+
+      /* Portada: Sete destacado + Kala, Coco y Tuki más pequeños */
+      .bp-hero--cover-quartet {
+        width: min(700px, 100%);
+        margin: 1.35rem auto 0;
+      }
+      .bp-hero__pair--cover {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: center;
+        gap: clamp(0.45rem, 2.5vw, 1.5rem);
+        row-gap: 0.45rem;
+        padding: 0.15rem 0 0;
+      }
+      .bp-hero--cover-quartet .bp-hero__img--cover-lead {
+        flex: 0 1 auto;
+        height: clamp(168px, 38vw, 248px);
+        max-width: min(58%, 320px);
+        width: auto;
+        object-fit: contain;
+        object-position: bottom;
+        filter: drop-shadow(0 18px 32px rgba(24, 24, 27, 0.09));
+      }
+      .bp-hero__support-trio {
+        display: flex;
+        flex: 1 1 auto;
+        align-items: flex-end;
+        justify-content: center;
+        gap: clamp(0.2rem, 1.8vw, 0.95rem);
+        min-width: min(100%, 300px);
+      }
+      .bp-hero--cover-quartet .bp-hero__img--cover-support {
+        flex: 1 1 0;
+        height: clamp(92px, 21vw, 138px);
+        max-width: 34%;
+        width: auto;
+        min-width: 0;
+        object-fit: contain;
+        object-position: bottom;
+        filter: drop-shadow(0 12px 22px rgba(24, 24, 27, 0.07));
+      }
+
+      .bp-revision-viz {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .bp-revision-chart-panel {
+        padding: 1rem 1.15rem 0.5rem;
+        border-radius: var(--radius);
+        background: linear-gradient(
+          155deg,
+          color-mix(in srgb, #fff 92%, var(--accent) 4%) 0%,
+          rgba(255, 255, 255, 0.72) 50%,
+          color-mix(in srgb, #fafafa 88%, var(--accent-dim) 6%) 100%
+        );
+        border: 1px solid color-mix(in srgb, var(--slide-line) 72%, var(--accent) 8%);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.85) inset,
+          0 10px 28px rgba(24, 24, 27, 0.06),
+          0 2px 6px rgba(24, 24, 27, 0.04);
+      }
+      .bp-revision-chart-sub {
+        margin: 0 0 0.5rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid color-mix(in srgb, var(--slide-line) 65%, transparent);
+        font-size: var(--slide-type-meta);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--slide-muted);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .bp-revision-chart-sub i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: 10px;
+        font-size: 0.78rem;
+        color: var(--accent-deep);
+        background: color-mix(in srgb, var(--accent) 16%, #fff);
+        border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--slide-line));
+      }
+      .bp-revision-chart-wrap {
+        position: relative;
+        height: clamp(196px, 26vh, 272px);
+        width: 100%;
+        border-radius: var(--radius-sm);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, color-mix(in srgb, var(--slide-line) 12%, transparent) 100%);
+        border: 1px solid color-mix(in srgb, var(--slide-line) 55%, transparent);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        overflow: hidden;
+      }
+      .bp-revision-chart-wrap canvas {
+        display: block;
+      }
+      .bp-revision-chart-panel > .bp-data-note {
+        margin-top: 0.45rem;
+        max-width: none;
+      }
+      .bp-revision-steps {
+        margin-top: 0;
+        /* Misma caja de contenido que .bp-revision-chart-panel (padding lateral) para alinear columnas con las categorías del gráfico */
+        padding-inline: 1rem;
+        box-sizing: border-box;
+      }
+      .bp-revision-steps .step:not(:last-child)::after {
+        display: none;
+      }
+      .bp-revision-steps .step {
+        min-height: 6.25rem;
+      }
+
+      /* Process */
+      .process {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin-top: 1.2rem;
+      }
+      .process--5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+      .process--4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .process-flow {
+        position: relative;
+        margin-top: 1.2rem;
+        min-height: 8rem;
+      }
+      .process-flow__canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .process.process--with-flow {
+        position: relative;
+        z-index: 1;
+        margin-top: 0;
+      }
+      .process.process--with-flow .step:not(:last-child)::after {
+        display: none;
+      }
+      .step-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        margin-bottom: 0.45rem;
+        border-radius: 9px;
+        background: color-mix(in srgb, var(--accent) 12%, #fff);
+        color: var(--accent-deep);
+      }
+      .step-icon svg {
+        display: block;
+      }
+      @keyframes step-pop {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .slide.is-active .process--with-flow .step,
+      .slide.is-active .bp-revision-steps .step {
+        animation: step-pop 0.52s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+      }
+      .slide.is-active .process--with-flow .step:nth-child(1),
+      .slide.is-active .bp-revision-steps .step:nth-child(1) {
+        animation-delay: 0.04s;
+      }
+      .slide.is-active .process--with-flow .step:nth-child(2),
+      .slide.is-active .bp-revision-steps .step:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .slide.is-active .process--with-flow .step:nth-child(3),
+      .slide.is-active .bp-revision-steps .step:nth-child(3) {
+        animation-delay: 0.16s;
+      }
+      .slide.is-active .process--with-flow .step:nth-child(4),
+      .slide.is-active .bp-revision-steps .step:nth-child(4) {
+        animation-delay: 0.22s;
+      }
+      .slide.is-active .process--with-flow .step:nth-child(5),
+      .slide.is-active .bp-revision-steps .step:nth-child(5) {
+        animation-delay: 0.28s;
+      }
+      .slide.is-active .process--with-flow .step:nth-child(n + 6),
+      .slide.is-active .bp-revision-steps .step:nth-child(n + 6) {
+        animation-delay: 0.34s;
+      }
+      .step {
+        position: relative;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid color-mix(in srgb, var(--slide-line) 85%, transparent);
+        border-radius: var(--radius);
+        padding: 0.9rem 0.8rem;
+        min-height: 7.5rem;
+        box-shadow: none;
+      }
+      .step:not(:last-child)::after {
+        content: "\2192";
+        position: absolute;
+        right: -0.55rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--slide-line);
+        font-size: 0.95rem;
+        z-index: 2;
+      }
+      .num {
+        display: inline-grid;
+        place-items: center;
+        min-width: 1.65rem;
+        height: 1.65rem;
+        padding: 0 0.35rem;
+        border-radius: 7px;
+        background: var(--slide-ink);
+        color: #fafafa;
+        font-family: var(--font-ui);
+        font-weight: 700;
+        font-size: 0.72rem;
+        margin-bottom: 0.45rem;
+      }
+      .step h3 {
+        margin: 0 0 0.25rem;
+        font-family: var(--font-ui);
+        font-size: var(--slide-type-label);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: var(--slide-ink);
+      }
+      .step p {
+        margin: 0;
+        font-size: var(--slide-type-body);
+        color: var(--slide-muted);
+        line-height: var(--slide-lh-body);
+      }
+
+      .process--roadmap {
+        position: relative;
+        padding-top: 0.35rem;
+      }
+      .process--roadmap::before {
+        content: "";
+        position: absolute;
+        left: 3%;
+        right: 3%;
+        top: 2rem;
+        height: 1px;
+        background: var(--slide-line);
+        z-index: 0;
+      }
+      .process--roadmap .step {
+        z-index: 1;
+        border-top: 2px solid var(--accent);
+      }
+      .process--roadmap .step:not(:last-child)::after {
+        display: none;
+      }
+      .process--roadmap .num {
+        background: #fff;
+        color: var(--accent);
+        border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--slide-line));
+      }
+
+      .slide.slide-visual--road-ahead.is-active {
+        display: flex;
+        flex-direction: column;
+      }
+      .slide-visual--road-ahead .slide-frame {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .slide-visual--road-ahead .slide-body {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+      }
+      .slide-visual--road-ahead .process--roadmap {
+        flex: 1 1 auto;
+        min-height: min(10.5rem, 24vh);
+        margin-top: 0.25rem;
+        align-items: stretch;
+      }
+      .slide-visual--road-ahead .process--roadmap .step {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        flex: 1 1 auto;
+        padding: 0.72rem 0.5rem;
+      }
+      .slide-visual--road-ahead .process--roadmap .step h3 {
+        font-size: clamp(0.72rem, 1.05vw, 0.82rem);
+        letter-spacing: 0.03em;
+        text-transform: none;
+      }
+      .slide-visual--road-ahead .process--roadmap .step p {
+        flex: 1 1 auto;
+        margin-top: 0.2rem;
+        font-size: clamp(0.82rem, 1.15vw, 0.98rem);
+        line-height: 1.45;
+      }
+      .slide-visual--road-ahead .quote {
+        margin-top: auto;
+        flex-shrink: 0;
+        max-width: 52ch;
+        margin-inline: auto;
+        text-align: center;
+      }
+
+      .slide.is-active .process--roadmap .step {
+        animation: step-pop 0.52s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+      }
+      .slide.is-active .process--roadmap .step:nth-child(1) {
+        animation-delay: 0.04s;
+      }
+      .slide.is-active .process--roadmap .step:nth-child(2) {
+        animation-delay: 0.09s;
+      }
+      .slide.is-active .process--roadmap .step:nth-child(3) {
+        animation-delay: 0.14s;
+      }
+      .slide.is-active .process--roadmap .step:nth-child(4) {
+        animation-delay: 0.19s;
+      }
+      .slide.is-active .process--roadmap .step:nth-child(5) {
+        animation-delay: 0.24s;
+      }
+
+      .before-after {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        gap: 0.85rem;
+        align-items: stretch;
+        margin-top: 1.15rem;
+        min-width: 0;
+      }
+      .arrow-big {
+        display: grid;
+        place-items: center;
+        color: var(--accent-deep);
+        font-size: 1.35rem;
+      }
+
+      .list-clean {
+        list-style: none;
+        margin: 0.65rem 0 0;
+        padding: 0;
+        display: grid;
+        gap: 0.35rem;
+      }
+      .list-clean li {
+        padding-left: 1rem;
+        position: relative;
+        font-size: var(--slide-type-body);
+        color: var(--slide-muted);
+      }
+      .list-clean li::before {
+        content: "";
+        position: absolute;
+        width: 5px;
+        height: 1px;
+        left: 0;
+        top: 0.62rem;
+        background: var(--accent);
+      }
+      .list-icons {
+        list-style: none;
+        margin: 0.35rem 0 0;
+        padding: 0;
+        display: grid;
+        gap: 0.4rem;
+      }
+      .list-icons li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.45rem;
+        font-size: var(--slide-type-body);
+        color: var(--slide-muted);
+        line-height: var(--slide-lh-body);
+      }
+      .list-icons li i {
+        margin-top: 0.12rem;
+        color: var(--accent-deep);
+        flex-shrink: 0;
+      }
+      .icon-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.55rem;
+      }
+      .task-icon {
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid color-mix(in srgb, var(--slide-line) 85%, transparent);
+        border-radius: var(--radius-sm);
+        padding: 0.65rem 0.35rem;
+        text-align: center;
+        font-weight: 600;
+        font-size: var(--slide-type-body);
+        color: var(--slide-muted);
+      }
+      .task-icon .symbol {
+        width: 2.35rem;
+        height: 2.35rem;
+        border-radius: 10px;
+        margin: 0 auto 0.4rem;
+        display: grid;
+        place-items: center;
+        background: var(--card-a);
+        font-size: 1.15rem;
+      }
+
+      .slide-visual--symbols .task-icon {
+        font-size: clamp(0.8rem, 1.15vw, 0.95rem);
+        line-height: 1.25;
+        hyphens: auto;
+      }
+
+      .timeline {
+        display: grid;
+        gap: 0.65rem;
+        margin-top: 1.1rem;
+      }
+      .timeline-row {
+        display: grid;
+        grid-template-columns: 9.5rem 1fr;
+        gap: 0.75rem;
+        align-items: start;
+      }
+      .timeline-row .label {
+        font-family: var(--font-ui);
+        font-size: var(--slide-type-meta);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-align: center;
+        padding: 0.4rem 0.6rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--slide-line);
+        background: #fff;
+        color: var(--slide-ink);
+      }
+      .timeline-row .desc {
+        font-size: var(--slide-type-body);
+        line-height: var(--slide-lh-body);
+        color: var(--slide-muted);
+        padding: 0.65rem 0.85rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--slide-line);
+        background: #fff;
+      }
+
+      .age-companion-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 0.75rem;
+        width: 100%;
+        max-width: min(1000px, 100%);
+        margin-inline: auto;
+      }
+      .age-companion-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        min-width: 0;
+        min-height: 0;
+      }
+      .slide.slide-visual--ages.is-active {
+        display: flex;
+        flex-direction: column;
+      }
+      .slide-visual--ages .slide-frame {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .slide-visual--ages .slide-body {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+      }
+      .slide-visual--ages .age-companion-grid {
+        flex: 1 1 auto;
+        min-height: min(16rem, 32vh);
+        align-self: stretch;
+        margin-top: 0.35rem;
+      }
+      .slide-visual--ages .age-companion-col .bp-stat {
+        margin-top: 0;
+      }
+      .slide-visual--ages .age-companion-col .bp-stat span {
+        text-transform: none;
+        letter-spacing: 0.02em;
+        font-weight: 600;
+      }
+      .slide-visual--ages .age-companion-col .bp-stat .bp-stat__mascot {
+        display: block;
+        width: auto;
+        height: clamp(72px, 13vw, 108px);
+        max-width: min(100%, 132px);
+        margin: 0 auto 0.2rem;
+        object-fit: contain;
+        object-position: bottom center;
+        filter: drop-shadow(0 10px 20px rgba(24, 24, 27, 0.08));
+      }
+      .age {
+        min-height: 10.5rem;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 1rem;
+        border-radius: var(--radius);
+        border: 1px solid color-mix(in srgb, var(--slide-line) 85%, transparent);
+        background: rgba(255, 255, 255, 0.82);
+        box-shadow: none;
+      }
+      .slide-visual--ages .age-companion-col .age {
+        min-height: min(9.5rem, 22vh);
+        margin-top: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        place-items: start;
+        justify-content: flex-start;
+        padding: 1.05rem 1.1rem;
+        flex: 1 1 auto;
+      }
+      .age h3 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--slide-ink);
+      }
+      .slide-visual--ages .age-companion-col .age h3 {
+        width: 100%;
+      }
+      .slide-visual--ages .age-companion-col .age h3 i {
+        margin-right: 0.35rem;
+        color: var(--accent-deep);
+      }
+      .age p {
+        margin: 0.45rem 0 0;
+        font-size: var(--slide-type-body);
+        color: var(--slide-muted);
+        line-height: var(--slide-lh-body);
+      }
+      .slide-visual--ages .age-companion-col .age p {
+        flex: 1 1 auto;
+        margin-top: 0.4rem;
+      }
+
+      .bp-key-pills--span2 {
+        grid-column: 1 / -1;
+        justify-content: center;
+        margin-bottom: 0.25rem;
+      }
+
+      /* ——— Escritorio: rejillas por slide (≥901px) ——— */
+      @media (min-width: 901px) {
+        .slide-frame,
+        .slide-frame--wide {
+          max-width: min(1080px, 100%);
+        }
+
+        .slide-visual--split-quote .layout-2 {
+          grid-template-columns: 1.12fr 0.88fr;
+          gap: clamp(1.35rem, 2.8vw, 2.5rem);
+        }
+
+        .slide-visual--compare .slide-body {
+          display: grid;
+          grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1fr);
+          grid-template-rows: auto;
+          gap: 0.85rem 1.65rem;
+          align-items: start;
+        }
+        .slide-visual--compare .slide-body > .bp-slide-aside {
+          grid-column: 1;
+          grid-row: 1;
+          min-height: 0;
+        }
+        .slide-visual--compare .slide-body > .before-after {
+          grid-column: 2;
+          grid-row: 1;
+          margin-top: 0;
+          align-self: start;
+        }
+
+        .slide-visual--matrix .cards {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 1rem;
+        }
+
+        .slide-visual--symbols .icon-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 0.75rem;
+          max-width: 100%;
+        }
+
+        .slide-visual--bridge .slide-frame--center .slide-body {
+          display: grid;
+          grid-template-columns: minmax(200px, 0.36fr) minmax(0, 1fr);
+          grid-template-rows: auto auto;
+          gap: 0.75rem 1.75rem;
+          align-items: stretch;
+          text-align: left;
+          max-width: min(980px, 100%);
+          margin-inline: auto;
+        }
+        .slide-visual--bridge .slide-body > .bp-slide-aside {
+          grid-column: 1;
+          grid-row: 1 / span 2;
+          align-self: center;
+        }
+        .slide-visual--bridge .slide-body > .text.big {
+          grid-column: 2;
+          grid-row: 1 / span 2;
+          margin-inline: 0;
+          max-width: none;
+          align-self: center;
+        }
+        .slide-visual--bridge .slide-body > .bp-slide-band {
+          grid-column: 1 / -1;
+          grid-row: 3;
+        }
+
+        .bp-hero--cover-quartet {
+          width: min(780px, 100%);
+        }
+        .bp-hero--cover-quartet .bp-hero__img--cover-lead {
+          height: clamp(200px, 34vh, 304px);
+          max-width: min(52%, 360px);
+        }
+        .bp-hero--cover-quartet .bp-hero__img--cover-support {
+          height: clamp(108px, 19vh, 172px);
+        }
+
+        .slide-visual--universe .layout-2,
+        .slide-visual--art .layout-2 {
+          grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+        }
+        .slide-visual--universe .stack,
+        .slide-visual--art .stack {
+          gap: 1rem;
+        }
+
+        .slide-visual--story .layout-2 {
+          grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+          align-items: center;
+        }
+
+        .slide-visual--ages .age-companion-grid {
+          gap: 1.2rem;
+          max-width: min(1040px, 100%);
+        }
+        .slide-visual--ages .age-companion-col .age {
+          min-height: min(10.5rem, 26vh);
+        }
+        .slide-visual--ages .age-companion-col .bp-stat .bp-stat__mascot {
+          height: clamp(84px, 14vh, 124px);
+          max-width: min(100%, 148px);
+        }
+
+        .slide-visual--teacher .cards {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 1rem 1.1rem;
+        }
+        .slide-visual--teacher .cards .card {
+          min-height: 7.5rem;
+        }
+
+        .slide-visual--impact .slide-frame--center .slide-body {
+          display: grid;
+          grid-template-columns: minmax(240px, 0.38fr) minmax(0, 1fr);
+          grid-template-rows: auto auto auto auto;
+          gap: 0.6rem 1.5rem;
+          align-items: stretch;
+          text-align: left;
+          max-width: min(980px, 100%);
+          margin-inline: auto;
+        }
+        .slide-visual--impact .slide-body > .bp-slide-aside {
+          grid-column: 1;
+          grid-row: 1 / span 3;
+          justify-content: space-between;
+          align-self: stretch;
+        }
+        .slide-visual--impact .slide-body > .layout-3 {
+          grid-column: 2;
+          grid-row: 1 / span 3;
+          margin-top: 0;
+        }
+        .slide-visual--impact .slide-body > .bp-slide-band {
+          grid-column: 1 / -1;
+          grid-row: 4;
+        }
+
+        .bp-slide-band:not(:first-child) {
+          padding-top: 0.65rem;
+          margin-top: 0.15rem;
+          border-top: 1px solid color-mix(in srgb, var(--slide-line) 52%, transparent);
+        }
+
+        .slide-visual--split-quote .slide-body {
+          gap: 0.75rem;
+        }
+        .slide-visual--objectives .slide-body > .layout-3 {
+          margin-top: 0;
+        }
+        .slide-visual--idea .slide-frame--center .slide-body .bp-slide-stack {
+          max-width: 44rem;
+          margin-inline: auto;
+        }
+        .slide-visual--idea .bp-slide-stack .bp-table-wrap {
+          align-self: stretch;
+          width: 100%;
+          max-width: none;
+        }
+        .slide-visual--road-ahead .process--roadmap {
+          gap: 0.55rem;
+          min-height: min(11.5rem, 26vh);
+        }
+        .slide-visual--road-ahead .process--roadmap .step {
+          padding: 0.8rem 0.58rem;
+        }
+
+        .bp-revision-viz {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1.15rem;
+        }
+        .slide-visual--process .bp-revision-chart-wrap {
+          height: clamp(210px, 28vh, 280px);
+        }
+        .slide-visual--process .bp-revision-steps.process {
+          margin-top: 0;
+          gap: 0.65rem;
+        }
+        .slide-visual--process .bp-revision-steps .step {
+          min-height: 5.75rem;
+          padding: 0.75rem 0.55rem;
+        }
+
+        .bp-stat {
+          padding: 1rem 0.75rem;
+          border-radius: var(--radius);
+          background: linear-gradient(
+            160deg,
+            color-mix(in srgb, #fff 90%, var(--accent) 5%) 0%,
+            rgba(255, 255, 255, 0.78) 100%
+          );
+          border: 1px solid color-mix(in srgb, var(--slide-line) 70%, var(--accent) 12%);
+          box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 6px 18px rgba(24, 24, 27, 0.05);
+        }
+      }
+
+      @media (max-width: 900px) {
+        .deck-tag {
+          display: none;
+        }
+        .deck-brand__line {
+          white-space: normal;
+        }
+        body {
+          overflow: auto;
+          background-attachment: scroll;
+        }
+        .slide {
+          aspect-ratio: auto;
+          max-height: none;
+          min-height: calc(100dvh - var(--topbar-h) - 160px);
+        }
+        .slide.slide-visual--objectives.is-active {
+          display: block;
+        }
+        .slide-visual--objectives .slide-frame,
+        .slide-visual--objectives .slide-body {
+          flex: initial;
+          min-height: 0;
+        }
+        .slide-visual--objectives .slide-body {
+          justify-content: flex-start;
+        }
+        .slide-visual--objectives .layout-3.layout-3--objectives {
+          flex: none;
+          min-height: 0;
+          margin-top: 0.85rem;
+          grid-template-rows: none;
+        }
+        .slide-visual--objectives .layout-3 .card {
+          display: block;
+          height: auto;
+          min-height: 0;
+          padding: 1rem 1.15rem;
+        }
+        .slide-visual--objectives .layout-3 .card p {
+          flex: none;
+          margin-top: 0.4rem;
+        }
+        .slide.slide-visual--timeline.is-active {
+          display: block;
+        }
+        .slide-visual--timeline .slide-frame {
+          flex: initial;
+          min-height: 0;
+        }
+        .slide-visual--timeline .slide-body.layout-2 {
+          flex: none;
+          min-height: 0;
+          grid-template-rows: auto auto;
+        }
+        .slide-visual--timeline .layout-2 > div:first-child {
+          min-height: 0;
+        }
+        .slide-visual--timeline .bp-chart {
+          flex: none;
+        }
+        .slide-visual--timeline .timeline.timeline-visual {
+          height: auto;
+          grid-template-rows: none;
+          margin-top: 1rem;
+        }
+        .slide-visual--timeline .timeline-row {
+          align-items: start;
+        }
+        .slide-visual--timeline .timeline-row .label {
+          align-self: start;
+        }
+        .slide-visual--timeline .timeline-row .desc {
+          display: block;
+          min-height: 0;
+        }
+        .slide.slide-visual--road-ahead.is-active {
+          display: block;
+        }
+        .slide-visual--road-ahead .slide-frame,
+        .slide-visual--road-ahead .slide-body {
+          flex: initial;
+          min-height: 0;
+        }
+        .slide-visual--road-ahead .process--roadmap {
+          flex: none;
+          min-height: 0;
+        }
+        .slide-visual--road-ahead .process--roadmap .step {
+          display: block;
+          flex: none;
+        }
+        .slide-visual--road-ahead .process--roadmap .step p {
+          flex: none;
+        }
+        .slide-visual--road-ahead .quote {
+          margin-top: 0.85rem;
+        }
+        .slide.slide--cover.slide--outro.slide-visual--outro.is-active {
+          display: block;
+        }
+        .slide.slide--cover.slide--outro .slide-frame.slide-frame--cover {
+          flex: initial;
+          min-height: 0;
+        }
+        .slide-visual--outro .slide-body {
+          flex: none;
+          min-height: 0;
+        }
+        .slide-visual--outro .slide-body > .quote {
+          margin-top: 0.85rem;
+        }
+        .layout-2,
+        .before-after {
+          grid-template-columns: 1fr;
+        }
+        .arrow-big {
+          display: none;
+        }
+        .process,
+        .process--4,
+        .icon-grid,
+        .age-companion-grid,
+        .layout-3,
+        .cards {
+          grid-template-columns: 1fr;
+        }
+        .step:not(:last-child)::after {
+          display: none;
+        }
+        .process--roadmap::before {
+          display: none;
+        }
+        .process--roadmap .step {
+          border-top: none;
+          border-left: 2px solid var(--accent);
+        }
+        .timeline-row {
+          grid-template-columns: 1fr;
+        }
+        .process-flow {
+          min-height: auto;
+        }
+        .bp-stat-grid {
+          grid-template-columns: 1fr;
+        }
+        .slide.slide-visual--ages.is-active {
+          display: block;
+        }
+        .slide-visual--ages .slide-frame,
+        .slide-visual--ages .slide-body {
+          flex: initial;
+          min-height: 0;
+        }
+        .slide-visual--ages .age-companion-grid {
+          flex: none;
+          min-height: 0;
+          margin-top: 0.65rem;
+        }
+        .slide-visual--ages .age-companion-col .age {
+          min-height: 0;
+          flex: none;
+        }
+        .bp-rings {
+          gap: 0.65rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .slide.is-active {
+          animation: none;
+        }
+        .slide.is-active .process--with-flow .step,
+        .slide.is-active .bp-revision-steps .step,
+        .slide.is-active .process--roadmap .step {
+          animation: none;
+        }
+        .deck-progress-bar__fill {
+          transition: none;
+        }
+        #presenter-drawer {
+          transition: none;
+        }
+      }
+
+      @media print {
+        body {
+          background: #fff;
+          background-image: none;
+        }
+        .deck-topbar,
+        .deck-dock,
+        .presenter-bar {
+          display: none !important;
+        }
+        .viewport {
+          padding: 0;
+          display: block;
+        }
+        .slide {
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          display: block !important;
+          box-shadow: none;
+          border-radius: 0;
+          page-break-after: always;
+          max-height: none;
+          min-height: auto;
+          border: none;
+        }
+        .process-flow__canvas {
+          display: none !important;
+        }
+        #bpRevisionChart {
+          max-height: 240px !important;
+          width: 100% !important;
+          height: auto !important;
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#deck-main">Saltar al contenido</a>
+    <main id="deck-main" class="deck" aria-label="Buenas prácticas Descubriendo">
+      <header class="deck-topbar">
+        <div class="deck-topbar__inner">
+          <div class="deck-brand">
+            <img
+              class="deck-brand__mark deck-brand__mark--img"
+              src="assets/img/sete.png"
+              alt=""
+              width="191"
+              height="307"
+              decoding="async"
+            />
+            <div>
+              <span class="deck-brand__school">CSMB</span>
+              <span class="deck-brand__line">Educación Infantil · Buenas prácticas 2025-2026</span>
+            </div>
+          </div>
+          <div class="deck-topbar__meta">
+            <span id="deck-chapter" class="deck-chapter" aria-live="polite">Portada</span>
+            <span class="deck-tag deck-tag--accent">Proyecto Descubriendo</span>
+            <span class="deck-tag">Infantil</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="deck-workspace">
+        <section class="viewport">
+        <article class="slide slide--cover slide-visual slide-visual--cover is-active" data-deck-chapter="Portada" data-presenter-notes="Saludo breve|En tres ideas: sentido, autonomía y emoción|Presentar a Sete como guía principal y a Kala, Coco y Tuki como compañeros">
+          <div class="slide-frame slide-frame--cover slide-frame--fill">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-seedling" aria-hidden="true"></i> Buenas prácticas · Educación Infantil</p>
+              <h1>Descubriendo</h1>
+              <p class="subtitle">Rediseño pedagógico y visual para aprender con sentido, autonomía y emoción.</p>
+            </header>
+            <div class="slide-body">
+              <div class="bp-key-pills" aria-hidden="true">
+                <span class="bp-key-pill"><i class="fa-solid fa-compass" aria-hidden="true"></i> Sentido</span>
+                <span class="bp-key-pill"><i class="fa-solid fa-hand-sparkles" aria-hidden="true"></i> Autonomía</span>
+                <span class="bp-key-pill"><i class="fa-solid fa-heart" aria-hidden="true"></i> Emoción</span>
+              </div>
+              <!-- <div class="bp-kpi-strip" role="group" aria-label="Resumen numérico del deck">
+                <div class="bp-kpi">
+                  <div class="bp-kpi__val">18</div>
+                  <div class="bp-kpi__lab">Diapositivas</div>
+                </div>
+                <div class="bp-kpi">
+                  <div class="bp-kpi__val">5</div>
+                  <div class="bp-kpi__lab">Fases de revisión</div>
+                </div>
+                <div class="bp-kpi">
+                  <div class="bp-kpi__val">3</div>
+                  <div class="bp-kpi__lab">Compañeros por edad</div>
+                </div>
+              </div> -->
+              <!-- <div class="bp-badge-row" aria-hidden="true">
+                <img src="assets/img/bp-badge-descubriendo.svg" alt="" width="200" height="40" decoding="async" />
+              </div> -->
+              <div class="bp-hero bp-hero--cover-quartet" role="group" aria-label="Mascotas del proyecto: Sete, Kala, Coco y Tuki">
+                <div class="bp-hero__pair bp-hero__pair--cover">
+                  <img
+                    class="bp-hero__img bp-hero__img--cover-lead"
+                    src="assets/img/sete.png"
+                    alt="Sete"
+                    width="191"
+                    height="307"
+                    decoding="async"
+                  />
+                  <div class="bp-hero__support-trio">
+                    <img
+                      class="bp-hero__img bp-hero__img--cover-support"
+                      src="assets/img/kala.png"
+                      alt="Kala"
+                      width="244"
+                      height="250"
+                      decoding="async"
+                    />
+                    <img
+                      class="bp-hero__img bp-hero__img--cover-support"
+                      src="assets/img/coco.png"
+                      alt="Coco"
+                      width="200"
+                      height="280"
+                      decoding="async"
+                    />
+                    <img
+                      class="bp-hero__img bp-hero__img--cover-support"
+                      src="assets/img/tuki.png"
+                      alt="Tuki"
+                      width="220"
+                      height="280"
+                      decoding="async"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <footer class="slide-foot">
+              <div class="slide-footer slide-footer--contain">
+                <span><i class="fa-regular fa-calendar-check" aria-hidden="true"></i> Curso 2025-2026</span>
+                <span><i class="fa-solid fa-people-group" aria-hidden="true"></i> Equipo Descubriendo</span>
+              </div>
+            </footer>
+          </div>
+        </article>
+
+        <article class="slide slide--t1 slide-visual slide-visual--split-quote" data-deck-chapter="Origen" data-presenter-notes="Conectar motivación con necesidad de coherencia|Destacar la pregunta que unió al equipo|La tabla resume preguntas-guía si hay poco tiempo">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-flag-checkered" aria-hidden="true"></i> Punto de partida</p>
+              <h2>¿Por qué surge esta mejora?</h2>
+            </header>
+            <div class="slide-body">
+              <div class="layout-2">
+                <div class="bp-key-pills bp-key-pills--span2" aria-hidden="true">
+                  <span class="bp-key-pill"><i class="fa-solid fa-comments" aria-hidden="true"></i> Diálogo</span>
+                  <span class="bp-key-pill"><i class="fa-solid fa-shapes" aria-hidden="true"></i> Coherencia</span>
+                  <span class="bp-key-pill"><i class="fa-solid fa-children" aria-hidden="true"></i> Motivación</span>
+                </div>
+                <div>
+                  <p class="text big">
+                    Porque vimos la necesidad de dar <strong>coherencia y sentido</strong> al proyecto para aumentar la <strong>motivación</strong> y favorecer un aprendizaje más <strong>significativo</strong>.
+                  </p>
+                  <p class="quote">No queríamos cambiar fichas: queríamos que todo el proyecto tuviera un hilo.</p>
+                </div>
+                <div class="card card--sun">
+                  <h3><i class="fa-solid fa-circle-question" aria-hidden="true"></i> La pregunta que nos movió</h3>
+                  <p>¿Cómo podemos hacer que cada lámina, cada ficha, cada personaje y cada actividad formen parte de una misma experiencia?</p>
+                  <ul class="list-icons">
+                    <li><i class="fa-solid fa-check" aria-hidden="true"></i> Más sentido.</li>
+                    <li><i class="fa-solid fa-check" aria-hidden="true"></i> Más continuidad.</li>
+                    <li><i class="fa-solid fa-check" aria-hidden="true"></i> Más autonomía.</li>
+                    <li><i class="fa-solid fa-check" aria-hidden="true"></i> Más coherencia visual.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="bp-slide-band">
+                <div class="bp-table-wrap bp-table-wrap--flush">
+                  <table class="bp-table">
+                    <caption><i class="fa-solid fa-circle-question" aria-hidden="true"></i> Preguntas-guía</caption>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Sentido</th>
+                        <td>¿Cada lámina y ficha cuenta una misma historia?</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Continuidad</th>
+                        <td>¿Libro, calendario y aula avanzan en la misma dirección?</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Motivación</th>
+                        <td>¿El alumnado anticipa y quiere seguir explorando?</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t2 slide-visual slide-visual--compare" data-deck-chapter="Diagnóstico" data-presenter-notes="Primero: qué medían las barras (orientativo, no estadística)|Después: contraste Antes / Ahora en el aula|Un solo bloque a la izquierda para no repetir cifras">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> Necesidad detectada</p>
+              <h2>De actividades sueltas a experiencia de aprendizaje</h2>
+            </header>
+            <div class="slide-body">
+              <div class="bp-slide-aside">
+                <div class="bp-chart" aria-hidden="true">
+                  <div class="bp-chart__cap"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i> Lectura global del proyecto</div>
+                  <div class="bp-bar-row">
+                    <span>Coherencia</span>
+                    <div class="bp-bar" aria-hidden="true"><div class="bp-bar__fill" style="width: 42%"></div></div>
+                    <strong>42%</strong>
+                  </div>
+                  <div class="bp-bar-row">
+                    <span>Secuencia</span>
+                    <div class="bp-bar" aria-hidden="true"><div class="bp-bar__fill bp-bar__fill--coral" style="width: 38%"></div></div>
+                    <strong>38%</strong>
+                  </div>
+                  <div class="bp-bar-row">
+                    <span>Objetivo</span>
+                    <div class="bp-bar" aria-hidden="true"><div class="bp-bar__fill" style="width: 88%"></div></div>
+                    <strong>88%</strong>
+                  </div>
+                </div>
+                <p class="bp-data-note">
+                  * Porcentajes orientativos del diagnóstico interno (no son datos estadísticos reales).
+                </p>
+              </div>
+              <div class="before-after">
+                <div class="card card--coral">
+                  <h3><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Antes</h3>
+                  <ul>
+                    <li>Contenidos que no siempre encajaban con el calendario.</li>
+                    <li>Láminas sin ficha asociada o fichas sin suficiente contexto.</li>
+                    <li>Estilos gráficos diferentes.</li>
+                    <li>Personajes poco integrados en la narrativa.</li>
+                  </ul>
+                </div>
+                <div class="arrow-big" aria-hidden="true"><i class="fa-solid fa-arrow-right-long fa-2x"></i></div>
+                <div class="card card--green">
+                  <h3><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Ahora</h3>
+                  <ul>
+                    <li>Secuencia conectada con el curso escolar.</li>
+                    <li>Relación clara entre lámina, ficha y experiencia.</li>
+                    <li>Iconografía común para anticipar tareas.</li>
+                    <li>Universo visual unificado de Descubriendo.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t3 slide-visual slide-visual--idea" data-deck-chapter="Diseño educativo" data-presenter-notes="Idea fuerza: el diseño también educa|Los tres anillos: forma, personaje, iconografía|Coherencia visual como acompañamiento">
+          <div class="slide-frame slide-frame--center slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-eye" aria-hidden="true"></i> Idea fuerza</p>
+              <h2>¿Qué estamos enseñando visualmente?</h2>
+            </header>
+            <div class="slide-body">
+              <div class="bp-slide-stack">
+                <div class="bp-rings" aria-hidden="true">
+                  <div class="bp-ring"><span>1</span></div>
+                  <div class="bp-ring bp-ring--sun"><span>2</span></div>
+                  <div class="bp-ring bp-ring--sky"><span>3</span></div>
+                </div>
+                <p class="bp-micro-cap">Forma · Personaje · Iconografía en el aula</p>
+                <div class="bp-table-wrap bp-table-wrap--flush">
+                  <table class="bp-table">
+                    <caption><i class="fa-solid fa-book-open" aria-hidden="true"></i> Tres lecturas en paralelo</caption>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Forma</th>
+                        <td>Composición, proporción y espacio en blanco orientan la mirada.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Personaje</th>
+                        <td>Identidad, emoción y continuidad narrativa a lo largo del curso.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Iconografía</th>
+                        <td>Anticipar la acción sin depender todavía del texto escrito.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <p class="text big">
+                Nos dimos cuenta de que el diseño también educa: las formas, los personajes, los colores, el grosor de línea y los iconos ayudan al niño a comprender, anticipar y crear conexiones.
+              </p>
+              <p class="quote">La coherencia visual también es una forma de acompañamiento pedagógico.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t4 slide-visual slide-visual--objectives" data-deck-chapter="Objetivos" data-presenter-notes="Tres compromisos paralelos: calendario, narrativa, autonomía|La tabla cierra en una franja si el tiempo apremia">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-bullseye" aria-hidden="true"></i> Objetivos</p>
+              <h2>Tres objetivos que ordenan la mejora</h2>
+            </header>
+            <div class="slide-body">
+              <div class="layout-3 layout-3--start layout-3--objectives">
+                <div class="card card--green">
+                  <h3><i class="fa-solid fa-calendar-days" aria-hidden="true"></i> 1. Secuencia y calendario</h3>
+                  <p>Organizar los contenidos según el año académico, los acontecimientos del curso y la evolución de los alumnos.</p>
+                </div>
+                <div class="card card--sun">
+                  <h3><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i> 2. Personajes y cuentos</h3>
+                  <p>Presentar a Sete y al animal de cada curso como hilo narrativo para despertar curiosidad y vínculo emocional.</p>
+                </div>
+                <div class="card card--sky">
+                  <h3><i class="fa-solid fa-hand-point-up" aria-hidden="true"></i> 3. Autonomía</h3>
+                  <p>Incorporar iconografía para que el alumnado interprete qué tiene que hacer antes de depender del adulto.</p>
+                </div>
+              </div>
+              <div class="bp-slide-band">
+                <div class="bp-table-wrap">
+                  <table class="bp-table">
+                    <caption><i class="fa-solid fa-bullseye" aria-hidden="true"></i> Objetivos en una franja</caption>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Calendario</th>
+                        <td>Contenidos alineados al curso y a la evolución del grupo.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Narrativa</th>
+                        <td>Sete y el animal de cada etapa; cuentos introductorios.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Autonomía</th>
+                        <td>Símbolos de acción visibles en láminas y fichas.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t1 slide-visual slide-visual--process" data-deck-chapter="Proceso" data-presenter-notes="El gráfico es ilustrativo: edita data-chart-* en el HTML si hace falta|Recorrer los cinco pasos en orden|Conectar cada paso con un hallazgo del equipo">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i> Proceso de trabajo</p>
+              <h2>Así empezó la revisión</h2>
+            </header>
+            <div class="slide-body bp-revision-viz">
+              <div class="bp-revision-chart-panel"
+                id="bp-revision-data"
+                data-chart-bar="88,84,52,72,90"
+                data-chart-line="62,70,58,82,96"
+                data-chart-labels="Láminas|Libro|Autonomía|Iconos|Estilo"
+              >
+                <p class="bp-revision-chart-sub">
+                  <i class="fa-solid fa-chart-column" aria-hidden="true"></i> Secuencia de revisión (índices ilustrativos)
+                </p>
+                <div class="bp-revision-chart-wrap" role="img" aria-labelledby="bp-revision-chart-title">
+                  <span id="bp-revision-chart-title" class="sr-only">
+                    Gráfico de foco documental y profundidad de análisis por fase: láminas, libro, autonomía, iconos y
+                    estilo. Valores orientativos.
+                  </span>
+                  <canvas id="bpRevisionChart" width="900" height="260" aria-hidden="true"></canvas>
+                </div>
+                <!-- <p class="bp-data-note">
+                  * Índices ilustrativos. Para cambiar barras, línea y etiquetas, edita los atributos
+                  <span class="bp-mono">data-chart-bar</span>, <span class="bp-mono">data-chart-line</span> y
+                  <span class="bp-mono">data-chart-labels</span> del panel con id <span class="bp-mono">bp-revision-data</span>.
+                </p> -->
+              </div>
+              <div class="bp-slide-band">
+                <div class="process process--5 bp-revision-steps">
+                  <div class="step">
+                    <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-table-list"></i></span>
+                    <span class="num">1</span>
+                    <h3>Láminas</h3>
+                    <p>Revisamos contenidos, fechas y relación con el calendario.</p>
+                  </div>
+                  <div class="step">
+                    <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-book"></i></span>
+                    <span class="num">2</span>
+                    <h3>Libro</h3>
+                    <p>Reorganizamos fichas para que hubiera relación lámina-ficha.</p>
+                  </div>
+                  <div class="step">
+                    <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-child-reaching"></i></span>
+                    <span class="num">3</span>
+                    <h3>Autonomía</h3>
+                    <p>Vimos que las láminas no siempre se entendían por sí solas.</p>
+                  </div>
+                  <div class="step">
+                    <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-icons"></i></span>
+                    <span class="num">4</span>
+                    <h3>Iconos</h3>
+                    <p>Incorporamos símbolos de acción: colorea, pica, pega…</p>
+                  </div>
+                  <div class="step">
+                    <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-palette"></i></span>
+                    <span class="num">5</span>
+                    <h3>Estilo</h3>
+                    <p>Detectamos la necesidad de unificar personajes, línea y diseño.</p>
+                  </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t2 slide-visual slide-visual--timeline" data-deck-chapter="Calendario" data-presenter-notes="El calendario como eje de sentido|Pesos por bloque son orientativos|Relacionar cada franja con ejemplos de aula">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i> Reorganización de contenidos</p>
+              <h2>El calendario como eje de sentido</h2>
+            </header>
+            <div class="slide-body layout-2">
+              <div class="bp-slide-aside">
+                <p class="text bp-lead-in">Cuatro momentos del curso, con pesos orientativos en contenidos.</p>
+                <p class="text">
+                  Los contenidos se han reorganizado en función del año académico y de los momentos significativos del curso. Esto permite que el aprendizaje conecte mejor con lo que el alumnado vive en el aula.
+                </p>
+                <div class="bp-chart" aria-hidden="true">
+                  <div class="bp-chart__cap"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i> Pesos por bloque</div>
+                  <div class="bp-bar-row"><span>Inicio</span><div class="bp-bar"><div class="bp-bar__fill" style="width: 22%"></div></div><strong>22%</strong></div>
+                  <div class="bp-bar-row"><span>Aula</span><div class="bp-bar"><div class="bp-bar__fill bp-bar__fill--sky" style="width: 33%"></div></div><strong>33%</strong></div>
+                  <div class="bp-bar-row"><span>Curso</span><div class="bp-bar"><div class="bp-bar__fill" style="width: 35%"></div></div><strong>35%</strong></div>
+                  <div class="bp-bar-row"><span>Cierre</span><div class="bp-bar"><div class="bp-bar__fill bp-bar__fill--coral" style="width: 10%"></div></div><strong>10%</strong></div>
+                </div>
+                <p class="bp-data-note">* Distribución orientativa del peso de contenidos por bloque temático.</p>
+              </div>
+              <div class="timeline timeline-visual">
+                <div class="timeline-row"><span class="label"><i class="fa-solid fa-seedling" aria-hidden="true"></i> Inicio</span><span class="desc">Presentación de Sete, Kala y el universo Descubriendo.</span></div>
+                <div class="timeline-row"><span class="label"><i class="fa-solid fa-school" aria-hidden="true"></i> Aula</span><span class="desc">Materiales, profesiones, rutinas y vida del colegio.</span></div>
+                <div class="timeline-row"><span class="label"><i class="fa-solid fa-leaf" aria-hidden="true"></i> Curso</span><span class="desc">Estaciones, celebraciones, acontecimientos y experiencias.</span></div>
+                <div class="timeline-row"><span class="label"><i class="fa-solid fa-flag-checkered" aria-hidden="true"></i> Cierre</span><span class="desc">Recogida, expresión y conexión de aprendizajes.</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t3 slide-visual slide-visual--matrix" data-deck-chapter="Materiales" data-presenter-notes="Lámina y ficha como unidad|Pedir un ejemplo concreto del aula si hay debate|La tabla resume el antes / ahora / docente">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-link" aria-hidden="true"></i> Lámina + ficha</p>
+              <h2>Una relación más clara entre materiales</h2>
+            </header>
+            <div class="slide-body">
+              <p class="text bp-lead-in">
+                Tres focos que ordenan la conversación entre el equipo, el libro y la experiencia en aula.
+              </p>
+              <div class="bp-slide-band">
+                <div class="bp-table-wrap">
+                  <table class="bp-table">
+                    <caption><i class="fa-solid fa-link" aria-hidden="true"></i> Relación lámina ↔ ficha</caption>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Antes</th>
+                        <td>Fichas desconectadas o con poco contexto respecto a la lámina.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Ahora</th>
+                        <td>Misma unidad temática; anticipación visual de la tarea.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Docente</th>
+                        <td>Secuencia explícita para presentar, acompañar y documentar.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="cards">
+                  <div class="card card--sky"><h3><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i> Lo que mejoramos</h3><p>Revisamos el libro para que las fichas estuvieran conectadas con las láminas y no funcionaran como tareas aisladas.</p></div>
+                  <div class="card card--sun"><h3><i class="fa-solid fa-face-smile" aria-hidden="true"></i> Lo que gana el alumno</h3><p>Puede anticipar, recordar y conectar mejor lo que ve, escucha, manipula y realiza.</p></div>
+                  <div class="card card--green"><h3><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i> Lo que gana el docente</h3><p>Una secuencia más clara para presentar, acompañar y documentar el aprendizaje.</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t4 slide-visual slide-visual--symbols" data-deck-chapter="Pictogramas" data-presenter-notes="Iconos pequeños, mensaje grande|Las mini-barras son un apoyo visual, no estadística|Renovar la lista de acciones con el grupo">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-shapes" aria-hidden="true"></i> Autonomía desde Infantil</p>
+              <h2>Nueva simbología visual</h2>
+            </header>
+            <div class="slide-body layout-2">
+              <div class="bp-slide-aside">
+                <p class="text bp-lead-in">Iconos pequeños, mensaje grande: anticipar sin leer.</p>
+                <p class="text">
+                  Los iconos ayudan a que el niño comprenda la acción que debe realizar: colorear, picar, pegar, recortar, rodear, unir, pintar con los dedos, rasgar… Aunque sean pequeños, son una herramienta potente de anticipación y comprensión.
+                </p>
+                <p class="quote">Los niños empiezan a leer el aula antes de leer palabras.</p>
+                <div class="bp-mini-bars" aria-hidden="true">
+                  <div class="bp-mini-bars__cap"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i> Frecuencia relativa en fichas (ilustrativo)</div>
+                  <div class="bp-mini-bars__row">
+                    <span>Colorea</span>
+                    <div class="bp-mini-bars__track"><div class="bp-mini-bars__fill" style="width: 92%"></div></div>
+                  </div>
+                  <div class="bp-mini-bars__row">
+                    <span>Recorta / pega</span>
+                    <div class="bp-mini-bars__track"><div class="bp-mini-bars__fill bp-mini-bars__fill--sky" style="width: 78%"></div></div>
+                  </div>
+                  <div class="bp-mini-bars__row">
+                    <span>Une / rodea</span>
+                    <div class="bp-mini-bars__track"><div class="bp-mini-bars__fill" style="width: 64%"></div></div>
+                  </div>
+                  <div class="bp-mini-bars__row">
+                    <span>Pintura dedos / rasga</span>
+                    <div class="bp-mini-bars__track"><div class="bp-mini-bars__fill bp-mini-bars__fill--coral" style="width: 48%"></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="icon-grid">
+                <div class="task-icon"><span class="symbol" aria-hidden="true"><i class="fa-solid fa-palette"></i></span>Colorea</div>
+                <div class="task-icon"><span class="symbol" aria-hidden="true"><i class="fa-solid fa-scissors"></i></span>Recorta</div>
+                <div class="task-icon"><span class="symbol" aria-hidden="true"><i class="fa-regular fa-circle-dot"></i></span>Pica</div>
+                <div class="task-icon"><span class="symbol" aria-hidden="true"><i class="fa-solid fa-paperclip"></i></span>Pega</div>
+                <div class="task-icon"><span class="symbol" aria-hidden="true"><i class="fa-solid fa-link"></i></span>Une</div>
+                <div class="task-icon"><span class="symbol" aria-hidden="true"><i class="fa-solid fa-hand-sparkles"></i></span>Pintura dedos</div>
+                <div class="task-icon"><span class="symbol" aria-hidden="true"><i class="fa-solid fa-bars-staggered"></i></span>Rasga</div>
+                <div class="task-icon"><span class="symbol" aria-hidden="true"><i class="fa-regular fa-circle"></i></span>Rodea</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t1 slide-visual slide-visual--bridge" data-deck-chapter="Convergencia" data-presenter-notes="Puente con Alive y lenguaje común en Infantil|El gráfico es esquemático de equilibrio|Destacar beneficio para autonomía">
+          <div class="slide-frame slide-frame--center slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-bridge" aria-hidden="true"></i> Conexión entre proyectos</p>
+              <h2>¿Por qué no unificar estilos en Infantil?</h2>
+            </header>
+            <div class="slide-body">
+              <div class="bp-slide-aside">
+                <div class="bp-chart" aria-hidden="true">
+                  <div class="bp-chart__cap"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Convergencia visual</div>
+                  <div class="bp-bar-row"><span>Descubriendo</span><div class="bp-bar"><div class="bp-bar__fill" style="width: 50%"></div></div><strong>50%</strong></div>
+                  <div class="bp-bar-row"><span>Alive</span><div class="bp-bar"><div class="bp-bar__fill bp-bar__fill--sky" style="width: 50%"></div></div><strong>50%</strong></div>
+                </div>
+                <p class="bp-data-note">
+                  * Esquema simbólico de equilibrio entre líneas de proyecto (referencia visual).
+                </p>
+              </div>
+              <p class="text big">
+                Al ver que en Alive ya se utilizaba una simbología para orientar las tareas, surgió una oportunidad: construir un lenguaje visual común en Infantil para facilitar comprensión, continuidad y autonomía.
+              </p>
+              <div class="bp-slide-band">
+                <div class="pill-row pill-row--center">
+                  <span class="pill"><i class="fa-solid fa-leaf" style="color: var(--accent-deep)" aria-hidden="true"></i> Descubriendo</span>
+                  <span class="pill"><i class="fa-solid fa-heart-pulse" style="color: #38bdf8" aria-hidden="true"></i> Alive</span>
+                  <span class="pill"><i class="fa-solid fa-language" style="color: #eab308" aria-hidden="true"></i> Lenguaje común</span>
+                  <span class="pill"><i class="fa-solid fa-circle-nodes" style="color: #e07a5f" aria-hidden="true"></i> Más coherencia</span>
+                </div>
+                <div class="bp-table-wrap bp-table-wrap--flush">
+                  <table class="bp-table">
+                    <caption><i class="fa-solid fa-object-group" aria-hidden="true"></i> Qué unificamos</caption>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Pictos</th>
+                        <td>Misma lógica de acción en tareas de ambos proyectos.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Rutina</th>
+                        <td>El niño anticipa qué hacer con menos mediación verbal.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Equipo</th>
+                        <td>Menos fricción entre líneas editoriales en Infantil.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t2 slide-visual slide-visual--universe" data-deck-chapter="Identidad" data-presenter-notes="Tres palancas: personajes, diseño, materiales|Checklist visual en tabla para cierre rápido|Pedir qué reconocen los niños al vuelo">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-globe" aria-hidden="true"></i> Coherencia gráfica</p>
+              <h2>Un mismo universo visual</h2>
+            </header>
+            <div class="slide-body layout-2">
+              <div class="bp-slide-aside">
+                <p class="text bp-lead-in">Tres palancas gráficas para que el proyecto se reconozca al vuelo.</p>
+                <p class="text">La revisión no se quedó en el contenido. También se han unificado criterios gráficos para que el proyecto sea reconocible y estable para el alumnado.</p>
+                <div class="bp-table-wrap bp-table-wrap--flush">
+                  <table class="bp-table">
+                    <caption><i class="fa-solid fa-list-check" aria-hidden="true"></i> Checklist visual</caption>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Personajes</th>
+                        <td>Estilo de ojos, línea y proporción compartidos.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Color</th>
+                        <td>Paleta reconocible en portadas, pictos y rincones.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Materiales</th>
+                        <td>Misma familia de iconos y tratamiento gráfico en láminas y fichas.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="stack">
+                <div class="card card--green"><h3><i class="fa-solid fa-user-group" aria-hidden="true"></i> Personajes</h3><p>Rasgos, ojos, expresiones y estilo común.</p></div>
+                <div class="card card--sun"><h3><i class="fa-solid fa-bezier-curve" aria-hidden="true"></i> Diseño</h3><p>Colores, formas, línea y composición más coherentes.</p></div>
+                <div class="card card--sky"><h3><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Materiales</h3><p>Láminas, fichas y recursos con una identidad compartida.</p></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t3 slide-visual slide-visual--story" data-deck-chapter="Narrativa" data-presenter-notes="Problema: Seta sin continuidad; animal casi solo en portada|Solución: cuento con Sete + animal de curso|Kala como primer vínculo en 3 años">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Narrativa</p>
+              <h2>Cuentos introductorios</h2>
+            </header>
+            <div class="slide-body layout-2">
+              <div class="bp-slide-aside">
+                <p class="text bp-lead-in">Del texto al personaje: una narrativa que acompaña todo el curso.</p>
+                <p class="text">Al inicio del libro aparecían Sete y Seta, pero Seta no tenía continuidad. Además, el animal del curso apenas aparecía más allí de la portada.</p>
+                <p class="text">La mejora propone presentar a <strong>Sete</strong> junto al <strong>animal de cada año</strong>, empezando en 3 años con <strong>Kala</strong>, mediante un pequeño cuento inicial.</p>
+                <div class="bp-table-wrap bp-table-wrap--flush">
+                  <table class="bp-table">
+                    <caption><i class="fa-solid fa-route" aria-hidden="true"></i> Ruta del cambio narrativo</caption>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Antes</th>
+                        <td>Seta sin continuidad; el animal del curso casi solo en portada.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Ahora</th>
+                        <td>Cuento inicial con Sete y el compañero de cada etapa.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3 años</th>
+                        <td><strong>Kala</strong> como primer vínculo afectivo con el proyecto.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="bp-hero bp-hero--compact" role="group" aria-label="Sete y Kala">
+                <div class="bp-hero__pair">
+                  <img
+                    class="bp-hero__img bp-hero__img--sete"
+                    src="assets/img/sete.png"
+                    alt=""
+                    width="142"
+                    height="301"
+                    decoding="async"
+                  />
+                  <img
+                    class="bp-hero__img bp-hero__img--kala"
+                    src="assets/img/kala.png"
+                    alt=""
+                    width="230"
+                    height="243"
+                    decoding="async"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t4 slide-visual slide-visual--ages" data-deck-chapter="Personajes" data-presenter-notes="Un compañero por etapa: Kala, Coco, Tuki|Tabla de referencia rápida por edad|Conectar con reto creciente de autonomía">
+          <div class="slide-frame slide-frame--center slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-people-roof" aria-hidden="true"></i> Cambio de planteamiento</p>
+              <h2>Sete y sus amigos</h2>
+            </header>
+            <div class="slide-body">
+              <p class="text bp-lead-in">Un compañero por etapa: identidad, narrativa y reto creciente.</p>
+              <p class="text big">Cada curso tiene un animal que acompaña a Sete y da identidad al libro, al cuento y a las actividades.</p>
+              <div class="bp-slide-band">
+                <div class="bp-table-wrap bp-table-wrap--flush">
+                  <table class="bp-table">
+                    <caption><i class="fa-solid fa-paw" aria-hidden="true"></i> Compañeros por curso</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Edad</th>
+                        <th scope="col">Animal</th>
+                        <th scope="col">Rol</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>3 años</td>
+                        <td>Kala</td>
+                        <td>Primer vínculo</td>
+                      </tr>
+                      <tr>
+                        <td>4 años</td>
+                        <td>Coco</td>
+                        <td>Continuidad</td>
+                      </tr>
+                      <tr>
+                        <td>5 años</td>
+                        <td>Tuki</td>
+                        <td>Autonomía y pensamiento</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="age-companion-grid">
+                <div class="age-companion-col">
+                  <div class="bp-stat">
+                    <img
+                      class="bp-stat__mascot"
+                      src="assets/img/kala.png"
+                      alt="Kala, koala"
+                      width="200"
+                      height="260"
+                      decoding="async"
+                    />
+                    <span>Kala</span>
+                  </div>
+                  <!-- <div class="age">
+                    <h3><i class="fa-solid fa-paw" aria-hidden="true"></i> 3 años</h3>
+                    <p>Sete y <strong>Kala</strong>  .<br />Primer vínculo con el proyecto.</p>
+                  </div> -->
+                </div>
+                <div class="age-companion-col">
+                  <div class="bp-stat">
+                    <img
+                      class="bp-stat__mascot"
+                      src="assets/img/coco.png"
+                      alt="Coco, cocodrilo"
+                      width="200"
+                      height="260"
+                      decoding="async"
+                    />
+                    <span>Coco</span>
+                  </div>
+                  <!-- <div class="age">
+                    <h3><i class="fa-solid fa-water" aria-hidden="true"></i> 4 años</h3>
+                    <p>Sete y <strong>Coco</strong>.<br />Continuidad narrativa.</p>
+                  </div> -->
+                </div>
+                <div class="age-companion-col">
+                  <div class="bp-stat">
+                    <img
+                      class="bp-stat__mascot"
+                      src="assets/img/tuki.png"
+                      alt="Tuki, tucán"
+                      width="200"
+                      height="260"
+                      decoding="async"
+                    />
+                    <span>Tuki</span>
+                  </div>
+                  <!-- <div class="age">
+                    <h3><i class="fa-solid fa-feather" aria-hidden="true"></i> 5 años</h3>
+                    <p>Sete y <strong>Tuki</strong>.<br />Mayor autonomía y pensamiento.</p>
+                  </div> -->
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t1 slide-visual slide-visual--teacher" data-deck-chapter="Docencia" data-presenter-notes="Cuatro ejes del material del profesor|Destacar rutinas de pensamiento y rincones|La tabla alinea foco con entrega">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> Material docente</p>
+              <h2>También revisamos el material del profesor</h2>
+            </header>
+            <div class="slide-body">
+              <p class="text bp-lead-in">Cuatro ejes para que el material del aula dialogue con la planificación.</p>
+              <div class="bp-slide-band">
+                <div class="bp-table-wrap bp-table-wrap--flush">
+                  <table class="bp-table">
+                    <caption><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i> Material del profesor</caption>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Orientaciones</th>
+                        <td>Sentido de cada propuesta, no solo el resultado final.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Secuencia</th>
+                        <td>Lámina, ficha, conversación, experiencia y cierre enlazados.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Pensamiento</th>
+                        <td>Fijarse en lo que pasa, verbalizar, comparar y anticipar.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Rincones</th>
+                        <td>Propuestas manipulativas y visuales según la autonomía de cada edad.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="cards">
+                  <div class="card card--green"><h3><i class="fa-solid fa-compass" aria-hidden="true"></i> Orientaciones</h3><p>Que el profesorado entienda el sentido de cada propuesta y no solo la actividad final.</p></div>
+                  <div class="card card--sky"><h3><i class="fa-solid fa-list-ol" aria-hidden="true"></i> Secuencia</h3><p>Mejor conexión entre lámina, ficha, conversación, experiencia y cierre.</p></div>
+                  <div class="card card--sun"><h3><i class="fa-solid fa-brain" aria-hidden="true"></i> Rutinas de pensamiento</h3><p>Más oportunidades para fijarse en lo que pasa, verbalizar, comparar, anticipar y reflexionar.</p></div>
+                  <div class="card card--pink"><h3><i class="fa-solid fa-cubes" aria-hidden="true"></i> Rincones</h3><p>Propuestas más manipulativas, visuales y adaptadas al nivel de autonomía de cada edad.</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t2 slide-visual slide-visual--art" data-deck-chapter="Plástica" data-presenter-notes="Plástica vinculada a contenido, no decorativa|Mini-barras como intensidad relativa del foco|Variedad técnicas y ajuste evolutivo">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-paintbrush" aria-hidden="true"></i> Experiencias plásticas</p>
+              <h2>Crear para comprender</h2>
+            </header>
+            <div class="slide-body layout-2">
+              <div class="bp-slide-aside">
+                <p class="text bp-lead-in">Técnicas y contenido van de la mano: la plástica también enseña.</p>
+                <p class="text">
+                  Se han revisado las actividades del libro para garantizar variedad, ajuste a la edad y autonomía real. La expresión plástica no es un añadido: es una forma de comprender, representar y consolidar aprendizajes.
+                </p>
+                <div class="bp-mini-bars" aria-hidden="true">
+                  <div class="bp-mini-bars__cap"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> Énfasis en la revisión (relativo)</div>
+                  <div class="bp-mini-bars__row">
+                    <span>Variedad técnica</span>
+                    <div class="bp-mini-bars__track"><div class="bp-mini-bars__fill" style="width: 88%"></div></div>
+                  </div>
+                  <div class="bp-mini-bars__row">
+                    <span>Ajuste evolutivo</span>
+                    <div class="bp-mini-bars__track"><div class="bp-mini-bars__fill bp-mini-bars__fill--sky" style="width: 82%"></div></div>
+                  </div>
+                  <div class="bp-mini-bars__row">
+                    <span>Vínculo con contenido</span>
+                    <div class="bp-mini-bars__track"><div class="bp-mini-bars__fill bp-mini-bars__fill--coral" style="width: 76%"></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="stack">
+                <div class="card card--coral"><h3><i class="fa-solid fa-fill-drip" aria-hidden="true"></i> Más variedad</h3><p>Pintura, rasgado, pegado, huellas, collage, modelado y manipulación.</p></div>
+                <div class="card card--green"><h3><i class="fa-solid fa-stairs" aria-hidden="true"></i> Más ajuste evolutivo</h3><p>Actividades relacionadas con lo que el alumnado puede realizar por sí solo.</p></div>
+                <div class="card card--sun"><h3><i class="fa-solid fa-link" aria-hidden="true"></i> Más sentido</h3><p>La técnica plástica está vinculada al contenido y no aparece como tarea aislada.</p></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t3 slide-visual slide-visual--impact" data-deck-chapter="Impacto" data-presenter-notes="Impacto esperado, no medido|Escala cualitativa en barras|Tabla stakeholder → beneficio para cierre">
+          <div class="slide-frame slide-frame--center slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i> Impacto esperado</p>
+              <h2>¿Qué ponemos en valor?</h2>
+            </header>
+            <div class="slide-body">
+              <div class="bp-slide-aside">
+                <div class="bp-chart" aria-hidden="true">
+                  <div class="bp-chart__cap"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> Foco del impacto</div>
+                  <div class="bp-bar-row"><span>Alumnado</span><div class="bp-bar"><div class="bp-bar__fill" style="width: 92%"></div></div><strong>Alto</strong></div>
+                  <div class="bp-bar-row"><span>Profesorado</span><div class="bp-bar"><div class="bp-bar__fill bp-bar__fill--sky" style="width: 85%"></div></div><strong>Alto</strong></div>
+                  <div class="bp-bar-row"><span>Proyecto</span><div class="bp-bar"><div class="bp-bar__fill bp-bar__fill--coral" style="width: 78%"></div></div><strong>Medio-alto</strong></div>
+                </div>
+                <p class="bp-data-note">
+                  * Escala cualitativa de impacto esperado (alto / medio-alto), no resultados medidos.
+                </p>
+              </div>
+              <div class="layout-3 layout-3--start layout-3--impact">
+                <div class="card card--green">
+                  <h3><i class="fa-solid fa-children" aria-hidden="true"></i> Para el alumnado</h3>
+                  <p>Más anticipación, autonomía y sentido en las actividades cotidianas.</p>
+                </div>
+                <div class="card card--sun">
+                  <h3><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i> Para el profesorado</h3>
+                  <p>Mayor claridad metodológica, secuencia y coherencia de materiales.</p>
+                </div>
+                <div class="card card--sky">
+                  <h3><i class="fa-solid fa-people-group" aria-hidden="true"></i> Para el proyecto</h3>
+                  <p>Identidad visual, narrativa y pedagógica compartida en Infantil.</p>
+                </div>
+              </div>
+              <div class="bp-slide-band">
+                <div class="bp-table-wrap">
+                  <table class="bp-table">
+                    <caption><i class="fa-solid fa-handshake" aria-hidden="true"></i> Stakeholder → beneficio</caption>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Alumnado</th>
+                        <td>Anticipación, autonomía y sentido en el día a día.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Profesorado</th>
+                        <td>Claridad metodológica y materiales más secuenciados.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Proyecto</th>
+                        <td>Marca pedagógica y gráfica reconocible en Infantil.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--t4 slide-visual slide-visual--road-ahead" data-deck-chapter="Hoja de ruta" data-presenter-notes="Próximo curso 2026-2027|Cinco hitos con animal por etapa|La tabla resume entregable y foco">
+          <div class="slide-frame slide-frame--wide">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-road" aria-hidden="true"></i> Próximos pasos</p>
+              <h2>Lo que viene ahora</h2>
+            </header>
+            <div class="slide-body">
+              <div class="process process--5 process--roadmap">
+                <div class="step"><span class="num">1</span><h3><i class="fa-solid fa-user-tie" aria-hidden="true"></i> Profesorado</h3><p>Generar el material docente para el curso 2026-2027.</p></div>
+                <div class="step"><span class="num">2</span><h3><i class="fa-solid fa-box-open" aria-hidden="true"></i> Recursos</h3><p>Ampliar cuentos, láminas, iconos y propuestas manipulativas.</p></div>
+                <div class="step"><span class="num">3</span><h3><i class="fa-solid fa-paw" aria-hidden="true"></i> 3 años</h3><p>Con <strong>Kala</strong> (koala), consolidar cuento, secuencia y primer vínculo con el proyecto.</p></div>
+                <div class="step"><span class="num">4</span><h3><i class="fa-solid fa-water" aria-hidden="true"></i> 4 años</h3><p>Con <strong>Coco</strong> (cocodrilo), la misma lógica de secuencia, personajes e iconografía.</p></div>
+                <div class="step"><span class="num">5</span><h3><i class="fa-solid fa-feather" aria-hidden="true"></i> 5 años</h3><p>Con <strong>Tuki</strong> (tucán), continuidad con mayor autonomía y pensamiento.</p></div>
+              </div>
+              <div class="bp-slide-band">
+                <div class="bp-table-wrap bp-table-wrap--flush">
+                  <table class="bp-table">
+                  <caption><i class="fa-solid fa-forward" aria-hidden="true"></i> Próximos pasos · foco</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Paso</th>
+                      <th scope="col">Entrega</th>
+                      <th scope="col">Foco</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Material docente 26-27</td>
+                      <td>Profesorado</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Cuentos, láminas, iconos</td>
+                      <td>Recursos</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Secuencia 3 años</td>
+                      <td>Kala</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Secuencia 4 años</td>
+                      <td>Coco</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>Secuencia 5 años</td>
+                      <td>Tuki</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="quote">El reto no es hacer más materiales, sino hacer materiales con más sentido.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide slide--cover slide--outro slide-visual slide-visual--outro" data-deck-chapter="Cierre" data-presenter-notes="Agradecer al equipo|Nombrar a Sete, Kala, Coco y Tuki|Invitar al diálogo si queda tiempo">
+          <div class="slide-frame slide-frame--cover slide-frame--fill">
+            <header class="slide-head">
+              <p class="kicker"><i class="fa-solid fa-heart" aria-hidden="true"></i> Cierre</p>
+              <h2>Muchas gracias</h2>
+              <p class="subtitle">Seguimos construyendo un Descubriendo más coherente, visual, motivador e inclusivo, con Sete, Kala, Coco y Tuki.</p>
+            </header>
+            <div class="slide-body">
+              <div class="bp-outro-icons" aria-hidden="true">
+                <i class="fa-solid fa-palette"></i>
+                <i class="fa-solid fa-book-open"></i>
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+              </div>
+              <div class="bp-outro-mascots" role="group" aria-label="Sete y compañeros por etapa">
+                <figure class="bp-outro-mascot">
+                  <img
+                    class="bp-outro-mascot__img"
+                    src="assets/img/sete.png"
+                    alt="Sete"
+                    width="120"
+                    height="193"
+                    decoding="async"
+                  />
+                  <figcaption>Sete</figcaption>
+                </figure>
+                <figure class="bp-outro-mascot">
+                  <img
+                    class="bp-outro-mascot__img"
+                    src="assets/img/kala.png"
+                    alt="Kala, koala"
+                    width="140"
+                    height="143"
+                    decoding="async"
+                  />
+                  <figcaption>Kala</figcaption>
+                </figure>
+                <figure class="bp-outro-mascot">
+                  <img
+                    class="bp-outro-mascot__img"
+                    src="assets/img/coco.png"
+                    alt="Coco, cocodrilo"
+                    width="200"
+                    height="200"
+                    decoding="async"
+                  />
+                  <figcaption>Coco</figcaption>
+                </figure>
+                <figure class="bp-outro-mascot">
+                  <img
+                    class="bp-outro-mascot__img"
+                    src="assets/img/tuki.png"
+                    alt="Tuki, tucán"
+                    width="200"
+                    height="200"
+                    decoding="async"
+                  />
+                  <figcaption>Tuki</figcaption>
+                </figure>
+              </div>
+              <p class="quote">A crear, descubrir y aprender.</p>
+            </div>
+            <footer class="slide-foot">
+              <div class="slide-footer slide-footer--narrow">
+                <span><i class="fa-solid fa-people-group" aria-hidden="true"></i> Equipo Descubriendo</span>
+                <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Curso 2025-2026 · CSMB</span>
+              </div>
+            </footer>
+          </div>
+        </article>
+        </section>
+
+        <nav class="deck-dock" aria-label="Progreso y navegación de diapositivas">
+          <div class="deck-dock__inner">
+            <div class="deck-dock__row">
+              <button id="prev" type="button"><span aria-hidden="true">&#8592;</span> Anterior</button>
+              <button id="next" class="primary" type="button">Siguiente <span aria-hidden="true">&#8594;</span></button>
+              <button id="first" type="button">Inicio</button>
+              <button id="last" type="button">Fin</button>
+            </div>
+            <div id="progress" class="deck-progress-label"></div>
+            <div
+              id="progress-bar"
+              class="deck-progress-bar"
+              role="progressbar"
+              aria-valuemin="1"
+              aria-label="Avance por diapositivas"
+            >
+              <span id="progress-fill" class="deck-progress-bar__fill"></span>
+            </div>
+          </div>
+        </nav>
+
+        <div class="presenter-bar" id="presenter-bar">
+          <div class="presenter-bar__inner">
+            <button
+              type="button"
+              id="presenter-toggle"
+              aria-expanded="false"
+              aria-controls="presenter-drawer"
+              title="Abre o cierra notas del presentador (tecla P)"
+            >
+              Notas del presentador
+            </button>
+          </div>
+          <div id="presenter-drawer">
+            <div id="presenter-notes-content"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+    <script src="assets/js/bp-revision-chart.js"></script>
+    <script src="assets/js/bp-deck-viz.js"></script>
+    <script>
+      (function () {
+        const slides = Array.from(document.querySelectorAll(".slide"));
+        const progress = document.getElementById("progress");
+        const progressBar = document.getElementById("progress-bar");
+        const progressFill = document.getElementById("progress-fill");
+        const prev = document.getElementById("prev");
+        const next = document.getElementById("next");
+        const first = document.getElementById("first");
+        const last = document.getElementById("last");
+        const chapterEl = document.getElementById("deck-chapter");
+        const notesEl = document.getElementById("presenter-notes-content");
+        const presenterToggle = document.getElementById("presenter-toggle");
+        const body = document.body;
+        let index = 0;
+
+        function escapeHtml(str) {
+          return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+        }
+
+        function setPresenterNotesFromSlide(slide) {
+          if (!notesEl) return;
+          var raw = slide && slide.getAttribute("data-presenter-notes");
+          if (!raw) {
+            notesEl.innerHTML = "<p>—</p>";
+            return;
+          }
+          notesEl.innerHTML = raw
+            .split("|")
+            .map(function (part) {
+              var t = part.trim();
+              return t ? "<p>" + escapeHtml(t) + "</p>" : "";
+            })
+            .join("");
+          if (!notesEl.innerHTML) notesEl.innerHTML = "<p>—</p>";
+        }
+
+        function render() {
+          slides.forEach(function (slide, i) {
+            slide.classList.toggle("is-active", i === index);
+          });
+          var cur = slides[index];
+          progress.innerHTML =
+            "<strong>Buenas prácticas · Descubriendo</strong> · " + (index + 1) + " / " + slides.length;
+          var pct = ((index + 1) / slides.length) * 100;
+          progressFill.style.width = pct + "%";
+          progressBar.setAttribute("aria-valuenow", String(index + 1));
+          progressBar.setAttribute("aria-valuemax", String(slides.length));
+          progressBar.setAttribute(
+            "aria-valuetext",
+            "Diapositiva " + (index + 1) + " de " + slides.length
+          );
+          if (chapterEl) {
+            var ch = cur && cur.getAttribute("data-deck-chapter");
+            chapterEl.textContent = ch || "";
+          }
+          setPresenterNotesFromSlide(cur);
+          document.dispatchEvent(
+            new CustomEvent("deckslidechange", {
+              bubbles: true,
+              detail: { index: index, slide: cur },
+            })
+          );
+        }
+
+        function go(i) {
+          index = Math.max(0, Math.min(slides.length - 1, i));
+          render();
+        }
+
+        function togglePresenterPanel() {
+          if (!presenterToggle) return;
+          var open = !body.classList.contains("bp-presenter-open");
+          body.classList.toggle("bp-presenter-open", open);
+          presenterToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        }
+
+        prev.addEventListener("click", function () {
+          go(index - 1);
+        });
+        next.addEventListener("click", function () {
+          go(index + 1);
+        });
+        first.addEventListener("click", function () {
+          go(0);
+        });
+        last.addEventListener("click", function () {
+          go(slides.length - 1);
+        });
+        if (presenterToggle) {
+          presenterToggle.addEventListener("click", togglePresenterPanel);
+        }
+        document.addEventListener("keydown", function (event) {
+          if (event.defaultPrevented) return;
+          var tag = (event.target && event.target.tagName) || "";
+          if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || event.target && event.target.isContentEditable) {
+            return;
+          }
+          if (event.key === "ArrowRight" || event.key === " " || event.key === "PageDown") {
+            event.preventDefault();
+            go(index + 1);
+          }
+          if (event.key === "ArrowLeft" || event.key === "PageUp") {
+            event.preventDefault();
+            go(index - 1);
+          }
+          if (event.key === "Home") {
+            event.preventDefault();
+            go(0);
+          }
+          if (event.key === "End") {
+            event.preventDefault();
+            go(slides.length - 1);
+          }
+          if (event.key === "p" || event.key === "P") {
+            event.preventDefault();
+            togglePresenterPanel();
+          }
+        });
+        render();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Descubriendo · 3 años</title>
+    <meta
+      name="description"
+      content="Programación, materiales y secuenciación semanal del proyecto Descubriendo para Educación Infantil 3 años  con Sete y Kala."
+    />
+    <meta name="theme-color" content="#7FAE3A" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23F4C84A'/%3E%3Cpath d='M32 12c-12 4-20 14-20 24 0 8 6 14 20 16 14-2 20-8 20-16 0-10-8-20-20-24z' fill='%237FAE3A'/%3E%3Cpath d='M14 24h36' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Ctext y='52' x='44' font-size='22'%3E??%3C/text%3E%3C/svg%3E"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Caveat:wght@500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+
+    <div class="sidebar-backdrop" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <div class="wrap header-wrap">
+        <a class="brand" href="#/" aria-label="Inicio">
+          <span class="brand__mark" aria-hidden="true">
+            <img src="assets/img/sete-saluda.png" alt="" loading="eager" />
+          </span>
+          <span class="brand__text">
+            <span class="brand__title">Descubriendo</span>
+            <span class="brand__subtitle">3 años · CSMB</span>
+          </span>
+        </a>
+
+        <button
+          type="button"
+          class="course-drawer-toggle"
+          aria-expanded="false"
+          aria-controls="sidebar"
+          title="Lista de meses y semanas"
+        >
+          <span class="course-drawer-toggle__icon" aria-hidden="true"></span>
+          <span class="course-drawer-toggle__text">Curso</span>
+        </button>
+
+        <nav class="primary-nav" aria-label="Trimestres">
+          <a href="#/" data-link="home">Inicio</a>
+          <a href="#/trimestre/t1" data-link="t1">1.º Trimestre</a>
+          <a href="#/trimestre/t2" data-link="t2">2.º Trimestre</a>
+          <a href="#/trimestre/t3" data-link="t3">3.º Trimestre</a>
+        </nav>
+
+        <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar" aria-label="Meses y semanas">
+        <!-- generado por app.js -->
+      </aside>
+
+      <main id="main" class="main" tabindex="-1">
+        <!-- generado por app.js -->
+      </main>
+    </div>
+
+    <footer class="site-footer">
+      <div class="wrap footer-wrap">
+        <p>
+          <span class="brand__title">Descubriendo</span>
+          · Proyecto EBI · Educación Infantil 3 años · CSMB
+        </p>
+        <p class="muted">Última actualización: <span id="lastUpdated"></span></p>
+      </div>
+    </footer>
+
+    <script src="assets/sprites.js"></script>
+    <script src="data/data.js"></script>
+    <script src="assets/app.js"></script>
+  </body>
+</html>
